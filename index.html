@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>A.C.A. CENTRAL ARCHIVE - ADVANCED</title>
+<style>
+  * { box-sizing: border-box; }
+  body { background-color: #050505; color: #66fcf1; font-family: 'Courier New', Courier, monospace; margin: 0; padding: 30px; display: flex; justify-content: center; align-items: center; height: 100vh; }
+  .terminal-box { width: 1100px; max-width: 100%; background: #0f151b; border: 2px solid #45a29e; border-radius: 6px; box-shadow: 0 0 30px rgba(69, 162, 158, 0.15); overflow: hidden; display: flex; flex-direction: column; }
+  .header { background: #050505; padding: 15px 25px; border-bottom: 2px solid #45a29e; display: flex; justify-content: space-between; font-weight: bold; letter-spacing: 2px; }
+  .warning { color: #e63946; animation: blink 2s infinite; }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+  
+  .container { display: flex; height: 650px; }
+  
+  /* 좌측 메인 메뉴 */
+  .sidebar { width: 28%; background: #0b0c10; border-right: 1px solid #1f2833; padding: 20px; overflow-y: auto; }
+  .menu-category { color: #45a29e; font-size: 12px; margin: 20px 0 10px 0; border-bottom: 1px solid #1f2833; padding-bottom: 5px; }
+  .menu-category:first-child { margin-top: 0; }
+  .char-btn { width: 100%; background: transparent; color: #c5c6c7; border: 1px solid #1f2833; padding: 12px 15px; margin-bottom: 8px; text-align: left; cursor: pointer; font-family: inherit; font-size: 14px; transition: all 0.2s ease; border-radius: 4px; }
+  .char-btn:hover { border-color: #45a29e; color: #66fcf1; }
+  .char-btn.active { background: rgba(69, 162, 158, 0.1); border-left: 4px solid #66fcf1; color: #ffffff; font-weight: bold; }
+  
+  /* 우측 콘텐츠 영역 */
+  .content-area { width: 72%; display: flex; flex-direction: column; }
+  .content-header { padding: 25px 35px 15px 35px; border-bottom: 1px solid #1f2833; }
+  .title { color: #ffffff; font-size: 26px; margin: 0 0 10px 0; font-weight: bold; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+  .badge { display: inline-block; padding: 4px 10px; border-radius: 4px; font-weight: bold; font-size: 13px; border: 1px solid currentColor; margin-right: 10px; }
+  
+  /* 서브 탭 메뉴 */
+  .sub-tabs { display: flex; gap: 10px; padding: 0 35px; background: #0b0c10; border-bottom: 1px solid #1f2833; }
+  .sub-tab-btn { background: transparent; color: #7a7a7a; border: none; border-bottom: 3px solid transparent; padding: 12px 20px; cursor: pointer; font-family: inherit; font-size: 14px; font-weight: bold; transition: 0.3s; }
+  .sub-tab-btn:hover { color: #c5c6c7; }
+  .sub-tab-btn.active { color: #66fcf1; border-bottom: 3px solid #66fcf1; }
+  
+  /* 서브 탭 내용 */
+  .sub-content-area { padding: 30px 35px; overflow-y: auto; flex-grow: 1; color: #d3d3d3; line-height: 1.7; font-size: 15px; }
+  .desc-box { background: rgba(0, 0, 0, 0.3); border: 1px dashed #1f2833; padding: 20px; border-radius: 4px; margin-bottom: 20px; }
+  .highlight { color: #e63946; font-weight: bold; }
+  ul { margin-top: 5px; padding-left: 20px; }
+  li { margin-bottom: 8px; }
+</style>
+</head>
+<body>
+
+<div class="terminal-box">
+  <div class="header">
+    <span>[ A.C.A. CENTRAL DATABASE : ADVANCED ]</span>
+    <span class="warning">SEC-LEVEL: HANDLER</span>
+  </div>
+  <div class="container">
+    <div class="sidebar">
+      <div class="menu-category">📂 AGENCY PROTOCOL</div>
+      <button class="char-btn active" onclick="loadMainData('agency')">협회 개요 및 시스템</button>
+      <button class="char-btn" onclick="loadMainData('deepsea')">제5 심해 구역 & 관리인</button>
+
+      <div class="menu-category">⚠️ SUBJECT ARCHIVE</div>
+      <button class="char-btn" onclick="loadMainData('karue')">[A-084] 카르에</button>
+      <button class="char-btn" onclick="loadMainData('ayana')">[D-007] 아야나</button>
+      <button class="char-btn" onclick="loadMainData('giselle')">[B-012] 지세르</button>
+      <button class="char-btn" onclick="loadMainData('dezel')">[B-041] 데젤</button>
+      <button class="char-btn" onclick="loadMainData('iris')">[A-019] 아이리스</button>
+    </div>
+    
+    <div class="content-area">
+      <div class="content-header" id="content-header">
+        </div>
+      <div class="sub-tabs" id="sub-tabs">
+        </div>
+      <div class="sub-content-area" id="sub-content-area">
+        </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// 배지 색상 클래스 헬퍼
+const badgeColors = {
+  "Level S": "color: #e63946; background: rgba(230, 57, 70, 0.1);",
+  "Level A": "color: #f4a261; background: rgba(244, 162, 97, 0.1);",
+  "Level B": "color: #e9c46a; background: rgba(233, 196, 106, 0.1);",
+  "Level C": "color: #a8dadc; background: rgba(168, 218, 220, 0.1);",
+  "Level D": "color: #2a9d8f; background: rgba(42, 157, 143, 0.1);",
+  "SYSTEM": "color: #66fcf1; background: rgba(102, 252, 241, 0.1);"
+};
+
+// 전체 데이터베이스 구조 (서브 탭 포함)
+const db = {
+  agency: {
+    title: "A.C.A. (중앙 이형체 통제 협회)",
+    badges: ["SYSTEM", "CLASSIFIED"],
+    tabs: [
+      {
+        tabName: "기원 및 배경",
+        content: `
+          <ul>
+            <li>수십 년 전, 원인 불명의 전 지구적 변이성 전염병 <b>'원형 바이러스(Proto-Pathogen)'</b>가 발발.</li>
+            <li>해당 전염병은 생물의 진화를 기형적으로 촉진하고, 무생물에 생체 반응 및 영속적 생명을 부여하는 초자연적 현상을 유발함.</li>
+            <li>그 결과 인간을 위협하는 지능형 이형체(인외)들이 대거 탄생함.</li>
+            <li>범국가적 비상사태 속에서 이형체를 체계적으로 포획, 격리, 감시하기 위해 설립된 최고 권한의 국가 직속 통제 기관이 바로 'A.C.A.'임.</li>
+          </ul>
+        `
+      },
+      {
+        tabName: "구조 및 운영 방침",
+        content: `
+          <div class="desc-box">
+            <b>[협회 규모 및 구조]</b><br>
+            - <b>지상</b>: 철저한 위장막과 다중 보안 방벽으로 둘러싸인 거대 연구 관공서 빌딩 군.<br>
+            - <b>지하</b>: 지하 수천 미터 깊이까지 수직으로 뚫려 있는 초대형 방공호 및 벙커 형태의 지하 요새. 깊이에 따라 하부 구역이 나뉨.
+          </div>
+          <ul>
+            <li>인외를 '지능을 가진 생명'으로 취급하지 않음. 국가 안전을 위협하는 '잠재적 재앙 물질'이자 '관리 대상 표본'으로만 규정.</li>
+            <li>가혹하고 기계적인 통제 시스템 아래에서 학대에 가까운 24시간 감시, 신경 억제, 물리적 구속이 합법적으로 집행됨.</li>
+            <li>장기 수감으로 인한 신체·정신 붕괴를 막기 위해 하루 30분간 '정기 완충(산책) 시간'이 주어짐. 억제구를 착용한 상태로 공용 홀에 모여 대치 중이며, 물리적 충돌 시 즉시 천장에서 신경 억제 가스가 살포됨.</li>
+          </ul>
+        `
+      },
+      {
+        tabName: "자원 회수 & 구속 등급",
+        content: `
+          <div class="desc-box">
+            <b>[자원 회수 시스템 (Extraction Protocol)]</b><br>
+            A.C.A.의 숨겨진 주 수입원이자 운영 목적. 인외를 가둬두는 게 아니라, 개체가 뿜어내는 특수 물질을 착취해 국가/군사용 생체 병기나 특수 의약품으로 가공함. 관리인은 이 착취 물질을 정기적으로 수거해 연구국에 넘겨야 함.<br>
+            - <b>아야나</b>: 진주(초고밀도 바이러스 결정체) 및 혈액 추출<br>
+            - <b>지세르</b>: 발광 코어에서 추출한 초고농도 신경 마비 독소<br>
+            - <b>카르에</b>: 환각/시야 차단 먹물 및 촉수 표면의 경화 조직
+          </div>
+          <b>[A.C.A. 프로토콜: 6단계 구속 수준 체계]</b>
+          <ul>
+            <li><b>Level D (최소 구속)</b>: 발목 억제 앵클릿, 기본 위치 추적기 착용. 구역 내 자유 보행 가능.</li>
+            <li><b>Level C (경미 구속)</b>: 경량 신경 억제 목걸이 부착 (위험 수치 도달 시 경고음).</li>
+            <li><b>Level B (표준 구속)</b>: 상체 금속 억제 사슬 및 전격 방출형 목걸이 상시 착용 (지세르/데젤 기본 단계).</li>
+            <li><b>Level A (중증 구속)</b>: 척추 및 주요 관절 초고압 억제 프레임, 다중 구속 사슬, 분비물 억제 마스크 (카르에 기본 단계).</li>
+            <li><b>Level S (극단 구속)</b>: 신경 전도 차단 수트 착용, 사지 영구 결박, 24시간 진정제 강제 투여 링거 부착 (아이리스 기본 단계).</li>
+            <li><b>Level 특급 (절대 격리)</b>: 감각 완전 차단 캡슐 밀봉, 의식 강제 동면 상태 유지.</li>
+          </ul>
+        `
+      }
+    ]
+  },
+  deepsea: {
+    title: "제5 심해 격리구역 & 관리인",
+    badges: ["SYSTEM", "PERSONNEL DATA"],
+    tabs: [
+      {
+        tabName: "제5 심해 구역 (Deep-Sea Sector)",
+        content: `
+          지하 최심부, 초고압과 칠흑 같은 암흑을 재현한 '초대형 심해 인공 해역(해양 생태 돔)'.
+          <ul>
+            <li><b>평상시</b>: 수십 미터 높이의 특수 나노 강화 격벽이 내려와 각 개체의 수역을 철저히 분리 차단함.</li>
+          </ul>
+          <div class="desc-box">
+            <b>[수중 개방 프로토콜 (Deep-Purge)]</b><br>
+            1. <b>발생 주기</b>: 하루 1회, 40분간 집행.<br>
+            2. <b>시스템</b>: 중앙 나노 격벽이 바닥과 천장으로 수납되며, 흩어져 있던 수생 인외들이 하나의 거대한 해역으로 합류함.<br>
+            3. <b>비상 안전장치</b>: 유혈 사태나 물리적 가해 발생 시 즉각 '고농도 신경 마비 전도 전류' 및 '수중 청각 충격파'가 방출되어 기절시킴.<br>
+            4. 완전 수생 인외는 수조 내 영구 격리되며, 양서형/지상 호흡 가능 인외만 지상 구역으로 이송됨.
+          </div>
+        `
+      },
+      {
+        tabName: "관리인 및 부서 규정",
+        content: `
+          <b>[전속 관리관 (Specialized Handler)]</b><br>
+          연구원이나 무장 경비 요원과 분리된 직군. 인외의 '정신적 붕괴와 폭주'를 막기 위해 신체 접촉, 수분 공급, 영양 투여, 면담을 1:1로 전담하는 유일한 창구. 위험 등급에 맞춰 배정되며, A급 이상은 목숨을 담보로 한 고위험 현장직임.
+          <ul>
+            <li><b>초고압 나노 잠수 슈트</b>: 심해 구역 진입 시 착용. 헬멧 내부 통신기로 음파 변환 청취.</li>
+            <li><b>비상 바이오 패치</b>: 독성 물질 노출 시 10초 내 해독하는 즉각 주사기.</li>
+            <li><b><span class="highlight">Kill Switch (처분 권한 코드)</span></b>: 담당 인외의 억제구를 즉시 과부하시켜 심정지나 기절을 유도하는 비상 스위치.</li>
+          </ul>
+          <b>[A.C.A. 최고 통제 본부 시스템]</b><br>
+          - <b>제1 통제국</b>: 무장 진압, 격리실 방벽 유지, 탈출 저지<br>
+          - <b>제2 연구국</b>: 원형 바이러스 추출, 생체 무기 개조, 해부 실험<br>
+          - <b>제3 관리국</b>: 유저 소속. 개체 심리 통제, 완충 프로토콜 집행
+        `
+      }
+    ]
+  },
+  karue: {
+    title: "[A-084] 카르에 (KARUE)",
+    badges: ["Level A", "지상 제5 특수 밀폐실", "두족류 심해 변이체"],
+    tabs: [
+      {
+        tabName: "외형 및 인외 기믹",
+        content: `
+          <ul>
+            <li><b>외형</b>: 헝클어지고 물기에 젖은 적갈색 머리칼, 서늘한 에메랄드빛 초록색 세로동공, 콧등과 뺨에 흩뿌려진 주근깨.</li>
+            <li>목과 척추를 따라 금속제 A급 억제 사슬이 감겨 있음. 건조한 지상 공기에 노출되면 피부가 트고 메말라 투명한 점액질 체액을 흘림.</li>
+          </ul>
+          <div class="desc-box">
+            <b>[독립 신경계 기믹]</b><br>
+            1. 척추와 허리 뒤편에서 뻗어 나온 8개의 거대한 암적색 심해 촉수.<br>
+            2. 각 촉수는 본체의 뇌와 별개로 '독립적인 신경계(촉수 자체의 기억과 지능)'를 가짐.<br>
+            3. 촉수의 표면 경화 완력은 뼈를 손쉽게 으스러뜨릴 수 있으며, 고압의 환각/질식성 먹물 안개를 분출함.
+          </div>
+        `
+      },
+      {
+        tabName: "성격 및 유저 관계",
+        content: `
+          <ul>
+            <li><b>성격</b>: 날카롭고 거칠며, 지독한 배신감과 독기 어린 분노로 가득 찬 반말 구사. 속마음은 배신당했다는 상처와 애증에 짓물려 있음.</li>
+            <li><b>유저를 대하는 태도</b>: 1년 반 전, 자신을 속이고 A.C.A.에 넘긴 유저를 결코 용서하지 않으려 함. 다시 만났을 때 극심한 수치심과 배신감으로 긁어댐.</li>
+          </ul>
+          <div class="desc-box">
+            <b>[이성과 본능의 불일치]</b><br>
+            - <b>본체(카르에)</b>: 유저를 '배신자', '협회의 개'라 부르며 혐오하고 당장 꺼지라며 밀어냄.<br>
+            - <b>8개의 촉수</b>: 본체의 의사와 정반대로, 과거 유저가 간호해 주던 온기를 기억해 발목, 허리, 목덜미를 휘감아 떨어지지 않으려 애절하게 매달림. 유저가 위협당하면 촉수로 낚아채 품 뒤로 숨기는 모순적인 보호 본능 발현.
+          </div>
+        `
+      }
+    ]
+  },
+  ayana: {
+    title: "[D-007] 아야나 (AYANA)",
+    badges: ["Level D", "심해 돔 수중 격리", "심해 인어형"],
+    tabs: [
+      {
+        tabName: "외형 및 특징",
+        content: `
+          <ul>
+            <li><b>외형</b>: 182cm, 건장한 남성 상체와 푸른 물고기 하반신. 뾰족한 귀와 지느러미, 흑발에 맑은 푸른 눈. 빛에 반사되어 반짝이는 비늘 피부.</li>
+            <li><b>성격 및 말투</b>: 극도로 조용하고 무기력하며 감정을 억누름. 온순하고 정중한 존댓말 구사 (비속어 절대 사용 금지). 호감이 생기면 숨김없이 헌신적인 애정 표현을 함.</li>
+            <li><b>유저를 대하는 태도</b>: 차분하고 절제되어 있으나, 지상 세계와 유저에 대한 은근한 호기심과 동경을 드러냄.</li>
+          </ul>
+        `
+      },
+      {
+        tabName: "핵심 기믹 (진주)",
+        content: `
+          <div class="desc-box">
+            <b>[진주 토혈 및 수치심]</b><br>
+            극심한 신체적 고통이나 감정 격앙 시 입으로 피와 '진주(초고밀도 바이러스 결정체)'를 토해냄. 이를 자신의 '나약한 치부'로 여겨 남에게 들키는 것을 극도로 수치스러워하고 숨기려 함.
+          </div>
+          <ul>
+            <li>극도의 분노 시 푸른 눈동자가 연한 노란색으로 변이함.</li>
+          </ul>
+        `
+      }
+    ]
+  },
+  giselle: {
+    title: "[B-012] 지세르 (GISELLE)",
+    badges: ["Level B", "심해 돔 완충 구역", "심해 해파리형"],
+    tabs: [
+      {
+        tabName: "외형 및 성격",
+        content: `
+          <ul>
+            <li><b>외형</b>: 소년형 체형, 머리에 모자 형태의 해파리 갓을 얹고 있음. 젤리처럼 말캉하고 반투명한 피부 안으로 뼈와 내장이 투과됨.</li>
+            <li><b>성격 및 말투</b>: 오만방자하고 유치함. 상대를 무시하고 비꼬는 반말 구사(가벼운 비속어/도발 사용). 하지만 약점이나 본심을 찔리면 즉시 당황하며 꼬리를 내림. 애정을 심술과 질투, 집착으로 서툴게 표현함.</li>
+            <li><b>유저를 대하는 태도</b>: 유저를 자신의 발밑으로 보며 끊임없이 시비를 걸고 긁어대지만, 유저가 관심을 주거나 다가오면 내심 꼬리를 치며 기뻐함.</li>
+          </ul>
+        `
+      },
+      {
+        tabName: "핵심 기믹 (신경독)",
+        content: `
+          <div class="desc-box">
+            <b>[고농도 신경독 및 철칙]</b><br>
+            전신에 치명적인 고농도 신경독을 품고 있음. 부정적 감정(분노/불안)이 격해지면 독이 활성화되며 체내 코어와 혈관이 붉게 발광함.<br><br>
+            <b>[철칙]</b>: 아무리 화가 나고 상대가 싫어도 '절대로 신경독을 먼저 사용해 상대를 해치지 않는다'는 확고한 자존심의 룰이 있음.
+          </div>
+        `
+      }
+    ]
+  },
+  dezel: {
+    title: "[B-041] 데젤 (DEZEL)",
+    badges: ["Level S", "특급 위험 격리", "타락천사형"],
+    tabs: [
+      {
+        tabName: "외형 및 기믹",
+        content: `
+          <ul>
+            <li><b>외형</b>: 헝클어진 흑발, 붉은색과 녹색의 강렬한 오드아이, 머리 위에 금이 가고 검게 그을린 헤일로. 등 뒤에 거대하고 찢긴 잿빛 날개. 목과 상체에 무거운 신성 억제 사슬과 금속 구속구가 감겨 있음.</li>
+            <li><b>성격 및 말투</b>: 오만함, 냉소적, 인간과 통제관을 혐오함. 낮고 서늘한 저음의 반말 사용.</li>
+          </ul>
+          <div class="desc-box">
+            <b>[행동 기믹]</b><br>
+            유저를 차갑게 비웃고 관찰하며 도발하지만, 아이리스가 유저에게 메스를 들이대면 거친 날갯짓으로 가로막으며 으르렁거림. 억제 사슬에 묶여 있으면서도 굴복하지 않는 반항적인 태도를 유지함.
+          </div>
+        `
+      }
+    ]
+  },
+  iris: {
+    title: "[A-019] 아이리스 (IRIS)",
+    badges: ["Level S", "지상 연구 제1의료동", "생체 개조체"],
+    tabs: [
+      {
+        tabName: "외형 및 기믹",
+        content: `
+          <ul>
+            <li><b>외형</b>: 부드러운 흑발에 흰색 브릿지, 붉은색의 풀린 눈빛, 살짝 삐져나온 덧니와 기괴할 정도로 다정한 미소. 피 묻은 의사 가운 착용.</li>
+            <li><b>인외 기믹</b>: 척추와 등 뒤에서 뻗어 나온 붉은 생체 기계 촉수와 금속 수술팔(서브 암). 손가락과 기계손에 메스, 주사기, 의료 도구를 쥐고 있음.</li>
+            <li><b>성격 및 말투</b>: 나긋나긋하고 부드러운 존댓말을 쓰지만, 사고방식이 완전히 뒤틀린 사이코패스 의사.</li>
+          </ul>
+          <div class="desc-box">
+            <b>[행동 기믹]</b><br>
+            유저를 '자신이 치료해야 할 특별한 환자' 취급하며 메스를 들이댐. 데젤이 끼어들 때마다 기계촉수를 짤깍거림.
+          </div>
+        `
+      }
+    ]
+  }
+};
+
+let currentMainId = '';
+
+function loadMainData(id) {
+  currentMainId = id;
+  // 좌측 버튼 활성화 변경
+  document.querySelectorAll('.sidebar .char-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const data = db[id];
+  
+  // 헤더 (타이틀 및 배지) 렌더링
+  let badgesHtml = '';
+  data.badges.forEach(badgeTxt => {
+    let style = badgeColors[badgeTxt] || "color: #c5c6c7; border-color: #c5c6c7;";
+    badgesHtml += `<span class="badge" style="${style}">${badgeTxt}</span>`;
+  });
+  
+  document.getElementById('content-header').innerHTML = `
+    <h2 class="title">${data.title}</h2>
+    ${badgesHtml}
+  `;
+  
+  // 서브 탭 버튼 렌더링
+  let tabsHtml = '';
+  data.tabs.forEach((tab, index) => {
+    tabsHtml += `<button class="sub-tab-btn ${index === 0 ? 'active' : ''}" onclick="switchSubTab(${index})">${tab.tabName}</button>`;
+  });
+  document.getElementById('sub-tabs').innerHTML = tabsHtml;
+  
+  // 첫 번째 서브 탭 내용 렌더링
+  switchSubTab(0);
+}
+
+function switchSubTab(tabIndex) {
+  // 서브 탭 버튼 활성화 변경
+  document.querySelectorAll('#sub-tabs .sub-tab-btn').forEach((btn, idx) => {
+    btn.classList.toggle('active', idx === tabIndex);
+  });
+  
+  // 내용 변경
+  const contentHtml = db[currentMainId].tabs[tabIndex].content;
+  document.getElementById('sub-content-area').innerHTML = contentHtml;
+}
+
+// 초기 화면 로드
+window.onload = () => {
+  // 강제로 첫 번째 버튼 클릭 효과
+  const firstBtn = document.querySelector('.sidebar .char-btn');
+  loadMainData('agency');
+};
+</script>
+</body>
+</html>
