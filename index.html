@@ -2,37 +2,39 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>A.C.A. CENTRAL ARCHIVE - ADVANCED</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A.C.A. CENTRAL ARCHIVE</title>
 <style>
-  * { box-sizing: border-box; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
   body { 
     background-color: #050505; 
     color: #66fcf1; 
     font-family: 'Courier New', Courier, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace; 
-    margin: 0; 
-    padding: 20px; 
+    padding: 15px; 
     display: flex; 
     justify-content: center; 
     align-items: center; 
     min-height: 100vh; 
   }
   
+  /* 화면 크기에 맞춰 자연스럽게 늘어나는 메인 컨테이너 */
   .terminal-box { 
-    width: 1100px; 
-    max-width: 100%; 
+    width: 100%; 
+    max-width: 1300px; 
     background: #0f151b; 
     border: 2px solid #45a29e; 
-    border-radius: 6px; 
+    border-radius: 8px; 
     box-shadow: 0 0 30px rgba(69, 162, 158, 0.15); 
     overflow: hidden; 
     display: flex; 
     flex-direction: column; 
+    min-height: 85vh;
   }
   
   .header { 
     background: #050505; 
-    padding: 12px 20px; 
+    padding: 14px 20px; 
     border-bottom: 2px solid #45a29e; 
     display: flex; 
     justify-content: space-between; 
@@ -40,13 +42,14 @@
     font-weight: bold; 
     letter-spacing: 1.5px; 
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 12px;
   }
   
   .header-left {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
+    flex-wrap: wrap;
   }
 
   .warning { 
@@ -57,7 +60,7 @@
   
   @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
   
-  /* 신스웨이브 라디오 제어 버튼 */
+  /* BGM 라디오 버튼 */
   .bgm-btn {
     background: rgba(69, 162, 158, 0.1);
     color: #66fcf1;
@@ -69,38 +72,39 @@
     font-weight: bold;
     cursor: pointer;
     transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 6px;
   }
   .bgm-btn:hover {
     background: #45a29e;
     color: #050505;
-    box-shadow: 0 0 10px rgba(102, 252, 241, 0.5);
+    box-shadow: 0 0 10px rgba(102, 252, 241, 0.4);
   }
   
   .container { 
     display: flex; 
-    min-height: 650px; 
+    flex: 1; 
+    min-height: 550px;
   }
   
-  /* 좌측 메인 메뉴 */
+  /* 좌측 메뉴 사이드바 */
   .sidebar { 
-    width: 28%; 
+    width: 280px; 
+    flex-shrink: 0;
     background: #0b0c10; 
     border-right: 1px solid #1f2833; 
     padding: 15px; 
     overflow-y: auto; 
   }
+  
   .menu-category { 
     color: #45a29e; 
     font-size: 12px; 
     margin: 15px 0 8px 0; 
     border-bottom: 1px solid #1f2833; 
-    padding-bottom: 5px; 
+    padding-bottom: 4px; 
     font-weight: bold;
   }
   .menu-category:first-child { margin-top: 0; }
+  
   .char-btn { 
     width: 100%; 
     background: transparent; 
@@ -114,29 +118,33 @@
     font-size: 14px; 
     transition: all 0.2s ease; 
     border-radius: 4px; 
+    display: block;
   }
   .char-btn:hover { border-color: #45a29e; color: #66fcf1; }
   .char-btn.active { background: rgba(69, 162, 158, 0.15); border-left: 4px solid #66fcf1; color: #ffffff; font-weight: bold; }
   
-  /* 우측 콘텐츠 영역 */
+  /* 우측 본문 콘텐츠 영역 */
   .content-area { 
-    width: 72%; 
+    flex: 1; 
     display: flex; 
     flex-direction: column; 
     background: #0f151b;
+    overflow: hidden;
   }
+  
   .content-header { 
     padding: 20px 25px 15px 25px; 
     border-bottom: 1px solid #1f2833; 
   }
+  
   .title { 
     color: #ffffff; 
-    font-size: 22px; 
+    font-size: 24px; 
     margin: 0 0 10px 0; 
     font-weight: bold; 
-    text-shadow: 0 0 10px rgba(255,255,255,0.2); 
     word-break: keep-all;
   }
+  
   .badge { 
     display: inline-block; 
     padding: 4px 8px; 
@@ -159,6 +167,7 @@
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
   }
+  
   .sub-tab-btn { 
     background: transparent; 
     color: #7a7a7a; 
@@ -179,46 +188,49 @@
   .sub-content-area { 
     padding: 25px; 
     overflow-y: auto; 
-    flex-grow: 1; 
+    flex: 1; 
     color: #d3d3d3; 
-    line-height: 1.7; 
+    line-height: 1.75; 
     font-size: 15px; 
   }
+  
   .desc-box { 
-    background: rgba(0, 0, 0, 0.35); 
+    background: rgba(0, 0, 0, 0.4); 
     border: 1px dashed #1f2833; 
     padding: 16px; 
     border-radius: 4px; 
     margin-bottom: 16px; 
     word-break: keep-all;
   }
+  
   .highlight { color: #e63946; font-weight: bold; }
-  ul { margin-top: 5px; padding-left: 20px; }
+  ul { margin-top: 6px; padding-left: 20px; }
   li { margin-bottom: 8px; word-break: keep-all; }
 
-  /* 📱 모바일 & 태블릿 최적화 반응형 미디어 쿼리 */
-  @media screen and (max-width: 820px) {
-    body { padding: 10px; height: auto; min-height: 100vh; }
-    .container { flex-direction: column; height: auto; }
+  /* 📱 모바일 & 태블릿 반응형 레이아웃 */
+  @media screen and (max-width: 860px) {
+    body { padding: 8px; }
+    .terminal-box { min-height: 95vh; }
+    .container { flex-direction: column; min-height: auto; }
     .sidebar { 
       width: 100%; 
       border-right: none; 
       border-bottom: 2px solid #45a29e; 
       padding: 12px;
-      max-height: 220px;
+      max-height: 200px;
     }
-    .content-area { width: 100%; min-height: 450px; }
+    .content-area { width: 100%; flex: 1; }
     .content-header { padding: 15px; }
-    .sub-tabs { padding: 0 10px; }
-    .sub-content-area { padding: 15px; font-size: 14px; line-height: 1.6; }
-    .title { font-size: 19px; }
-    .header { font-size: 12px; padding: 10px 15px; }
+    .title { font-size: 20px; }
+    .sub-tabs { padding: 0 12px; }
+    .sub-content-area { padding: 16px; font-size: 14px; line-height: 1.65; }
+    .header { padding: 12px 15px; font-size: 13px; }
   }
 </style>
 </head>
 <body>
 
-<!-- Synthwave Radio 공식 라이브 오디오 스트림 -->
+<!-- Synthwave Radio 라이브 오디오 스트림 -->
 <audio id="bgmAudio" preload="none">
   <source src="https://securestream.synthwaveradio.eu/live" type="audio/mpeg">
 </audio>
@@ -235,15 +247,15 @@
   <div class="container">
     <div class="sidebar">
       <div class="menu-category">📂 AGENCY PROTOCOL</div>
-      <button class="char-btn active" onclick="loadMainData('agency')">협회 개요 및 시스템</button>
-      <button class="char-btn" onclick="loadMainData('deepsea')">제5 심해 구역 & 관리인</button>
+      <button class="char-btn active" onclick="loadMainData('agency', this)">협회 개요 및 시스템</button>
+      <button class="char-btn" onclick="loadMainData('deepsea', this)">제5 심해 구역 & 관리인</button>
 
       <div class="menu-category">⚠️ SUBJECT ARCHIVE</div>
-      <button class="char-btn" onclick="loadMainData('karue')">[A-084] 카르에</button>
-      <button class="char-btn" onclick="loadMainData('ayana')">[D-007] 아야나</button>
-      <button class="char-btn" onclick="loadMainData('giselle')">[B-012] 지세르</button>
-      <button class="char-btn" onclick="loadMainData('dezel')">[B-041] 데젤</button>
-      <button class="char-btn" onclick="loadMainData('iris')">[A-019] 아이리스</button>
+      <button class="char-btn" onclick="loadMainData('karue', this)">[A-084] 카르에</button>
+      <button class="char-btn" onclick="loadMainData('ayana', this)">[D-007] 아야나</button>
+      <button class="char-btn" onclick="loadMainData('giselle', this)">[B-012] 지세르</button>
+      <button class="char-btn" onclick="loadMainData('dezel', this)">[B-041] 데젤</button>
+      <button class="char-btn" onclick="loadMainData('iris', this)">[A-019] 아이리스</button>
     </div>
     
     <div class="content-area">
@@ -255,7 +267,7 @@
 </div>
 
 <script>
-// 신스웨이브 라디오 실시간 스트림 제어
+// 신스웨이브 라디오 스트리밍 제어
 const bgm = document.getElementById('bgmAudio');
 const bgmBtn = document.getElementById('bgmBtn');
 let isPlaying = false;
@@ -269,7 +281,7 @@ function toggleBGM() {
       bgmBtn.style.borderColor = "#e63946";
       bgmBtn.style.color = "#ffffff";
     }).catch(err => {
-      console.log("스트리밍 연결 오류 또는 자동 재생 차단:", err);
+      console.log("오디오 재생 에러:", err);
     });
   } else {
     bgm.pause();
@@ -281,7 +293,7 @@ function toggleBGM() {
   }
 }
 
-// 배지 색상 클래스 헬퍼
+// 배지 색상 스타일
 const badgeColors = {
   "Level S": "color: #e63946; background: rgba(230, 57, 70, 0.1);",
   "Level A": "color: #f4a261; background: rgba(244, 162, 97, 0.1);",
@@ -514,18 +526,19 @@ const db = {
   }
 };
 
-let currentMainId = '';
+let currentMainId = 'agency';
 
-function loadMainData(id, targetElement) {
+function loadMainData(id, element) {
   currentMainId = id;
   
-  // 사이드바 버튼 활성화 제어
-  document.querySelectorAll('.sidebar .char-btn').forEach(btn => btn.classList.remove('active'));
-  if (targetElement) {
-    targetElement.classList.add('active');
+  // 사이드바 버튼 active 제어
+  const allBtns = document.querySelectorAll('.sidebar .char-btn');
+  allBtns.forEach(btn => btn.classList.remove('active'));
+  
+  if (element) {
+    element.classList.add('active');
   } else {
-    const defaultBtn = document.querySelector(`.sidebar .char-btn[onclick*="'${id}'"]`);
-    if (defaultBtn) defaultBtn.classList.add('active');
+    allBtns[0].classList.add('active');
   }
   
   const data = db[id];
@@ -553,18 +566,6 @@ function loadMainData(id, targetElement) {
   switchSubTab(0);
 }
 
-// 이벤트 리스너 연결
-document.querySelectorAll('.sidebar .char-btn').forEach(button => {
-  button.addEventListener('click', function(e) {
-    const fnString = this.getAttribute('onclick');
-    const match = fnString.match(/'([^']+)'/);
-    if (match) {
-      loadMainData(match[1], this);
-    }
-  });
-  button.removeAttribute('onclick');
-});
-
 function switchSubTab(tabIndex) {
   document.querySelectorAll('#sub-tabs .sub-tab-btn').forEach((btn, idx) => {
     btn.classList.toggle('active', idx === tabIndex);
@@ -574,10 +575,10 @@ function switchSubTab(tabIndex) {
   document.getElementById('sub-content-area').innerHTML = contentHtml;
 }
 
-// 초기 화면 로드
-window.onload = () => {
-  loadMainData('agency');
-};
+// 초기 실행
+window.addEventListener('DOMContentLoaded', () => {
+  loadMainData('agency', document.querySelector('.sidebar .char-btn'));
+});
 </script>
 </body>
 </html>
