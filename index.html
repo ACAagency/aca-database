@@ -18,7 +18,6 @@
     min-height: 100vh; 
   }
   
-  /* 화면 크기에 맞춰 자연스럽게 늘어나는 메인 컨테이너 */
   .terminal-box { 
     width: 100%; 
     max-width: 1300px; 
@@ -60,7 +59,6 @@
   
   @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
   
-  /* BGM 라디오 버튼 */
   .bgm-btn {
     background: rgba(69, 162, 158, 0.1);
     color: #66fcf1;
@@ -85,7 +83,6 @@
     min-height: 550px;
   }
   
-  /* 좌측 메뉴 사이드바 */
   .sidebar { 
     width: 280px; 
     flex-shrink: 0;
@@ -123,7 +120,6 @@
   .char-btn:hover { border-color: #45a29e; color: #66fcf1; }
   .char-btn.active { background: rgba(69, 162, 158, 0.15); border-left: 4px solid #66fcf1; color: #ffffff; font-weight: bold; }
   
-  /* 우측 본문 콘텐츠 영역 */
   .content-area { 
     flex: 1; 
     display: flex; 
@@ -156,7 +152,6 @@
     margin-bottom: 6px;
   }
   
-  /* 서브 탭 메뉴 */
   .sub-tabs { 
     display: flex; 
     gap: 8px; 
@@ -184,7 +179,6 @@
   .sub-tab-btn:hover { color: #c5c6c7; }
   .sub-tab-btn.active { color: #66fcf1; border-bottom: 3px solid #66fcf1; }
   
-  /* 서브 탭 내용 */
   .sub-content-area { 
     padding: 25px; 
     overflow-y: auto; 
@@ -207,7 +201,6 @@
   ul { margin-top: 6px; padding-left: 20px; }
   li { margin-bottom: 8px; word-break: keep-all; }
 
-  /* 📱 모바일 & 태블릿 반응형 레이아웃 */
   @media screen and (max-width: 860px) {
     body { padding: 8px; }
     .terminal-box { min-height: 95vh; }
@@ -230,9 +223,9 @@
 </head>
 <body>
 
-<!-- Synthwave Radio 라이브 오디오 스트림 -->
+<!-- 무제한 공식 스트리밍 오디오 -->
 <audio id="bgmAudio" preload="none">
-  <source src="https://securestream.synthwaveradio.eu/live" type="audio/mpeg">
+  <source src="https://radio.plaza.one/mp3" type="audio/mp3">
 </audio>
 
 <div class="terminal-box">
@@ -267,7 +260,6 @@
 </div>
 
 <script>
-// 신스웨이브 라디오 스트리밍 제어
 const bgm = document.getElementById('bgmAudio');
 const bgmBtn = document.getElementById('bgmBtn');
 let isPlaying = false;
@@ -281,7 +273,8 @@ function toggleBGM() {
       bgmBtn.style.borderColor = "#e63946";
       bgmBtn.style.color = "#ffffff";
     }).catch(err => {
-      console.log("오디오 재생 에러:", err);
+      console.log("재생 차단:", err);
+      alert("브라우저에서 음악 재생을 허용해 주세요!");
     });
   } else {
     bgm.pause();
@@ -293,7 +286,6 @@ function toggleBGM() {
   }
 }
 
-// 배지 색상 스타일
 const badgeColors = {
   "Level S": "color: #e63946; background: rgba(230, 57, 70, 0.1);",
   "Level A": "color: #f4a261; background: rgba(244, 162, 97, 0.1);",
@@ -303,7 +295,6 @@ const badgeColors = {
   "SYSTEM": "color: #66fcf1; background: rgba(102, 252, 241, 0.1);"
 };
 
-// 전체 데이터베이스 구조
 const db = {
   agency: {
     title: "A.C.A. (중앙 이형체 통제 협회)",
@@ -531,7 +522,6 @@ let currentMainId = 'agency';
 function loadMainData(id, element) {
   currentMainId = id;
   
-  // 사이드바 버튼 active 제어
   const allBtns = document.querySelectorAll('.sidebar .char-btn');
   allBtns.forEach(btn => btn.classList.remove('active'));
   
@@ -543,7 +533,6 @@ function loadMainData(id, element) {
   
   const data = db[id];
   
-  // 헤더 (타이틀 및 배지) 렌더링
   let badgesHtml = '';
   data.badges.forEach(badgeTxt => {
     let style = badgeColors[badgeTxt] || "color: #c5c6c7; border-color: #c5c6c7;";
@@ -555,14 +544,12 @@ function loadMainData(id, element) {
     ${badgesHtml}
   `;
   
-  // 서브 탭 버튼 렌더링
   let tabsHtml = '';
   data.tabs.forEach((tab, index) => {
     tabsHtml += `<button class="sub-tab-btn ${index === 0 ? 'active' : ''}" onclick="switchSubTab(${index})">${tab.tabName}</button>`;
   });
   document.getElementById('sub-tabs').innerHTML = tabsHtml;
   
-  // 첫 번째 서브 탭 내용 렌더링
   switchSubTab(0);
 }
 
@@ -575,7 +562,6 @@ function switchSubTab(tabIndex) {
   document.getElementById('sub-content-area').innerHTML = contentHtml;
 }
 
-// 초기 실행
 window.addEventListener('DOMContentLoaded', () => {
   loadMainData('agency', document.querySelector('.sidebar .char-btn'));
 });
