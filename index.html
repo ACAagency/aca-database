@@ -201,6 +201,9 @@
   ul { margin-top: 6px; padding-left: 20px; }
   li { margin-bottom: 8px; word-break: keep-all; }
 
+  /* 숨김 유튜브 플레이어 */
+  #player { display: none; }
+
   @media screen and (max-width: 860px) {
     body { padding: 8px; }
     .terminal-box { min-height: 95vh; }
@@ -223,10 +226,8 @@
 </head>
 <body>
 
-<!-- 무제한 공식 스트리밍 오디오 -->
-<audio id="bgmAudio" preload="none">
-  <source src="https://radio.plaza.one/mp3" type="audio/mp3">
-</audio>
+<!-- 백그라운드 유튜브 플레이어 div -->
+<div id="player"></div>
 
 <div class="terminal-box">
   <div class="header">
@@ -259,25 +260,46 @@
   </div>
 </div>
 
+<!-- 유튜브 IFrame API 로드 -->
+<script src="https://www.youtube.com/iframe_api"></script>
 <script>
-const bgm = document.getElementById('bgmAudio');
-const bgmBtn = document.getElementById('bgmBtn');
+let player;
 let isPlaying = false;
+let isPlayerReady = false;
+
+function onYouTubeIframeAPIReady() {
+  player = new YT.Player('player', {
+    height: '0',
+    width: '0',
+    videoId: '4xDzrJKXOOY', // 24시간 실시간 신스웨이브/Lofi 라이브 스트림 ID
+    playerVars: {
+      'autoplay': 0,
+      'controls': 0,
+      'loop': 1
+    },
+    events: {
+      'onReady': () => { isPlayerReady = true; }
+    }
+  });
+}
 
 function toggleBGM() {
+  const bgmBtn = document.getElementById('bgmBtn');
+  
+  if (!isPlayerReady) {
+    alert("오디오 모듈 로딩 중입니다. 1초 뒤 다시 눌러주세요!");
+    return;
+  }
+  
   if (!isPlaying) {
-    bgm.play().then(() => {
-      isPlaying = true;
-      bgmBtn.innerHTML = "📻 SYNTHWAVE RADIO : ON 🔴";
-      bgmBtn.style.background = "#e63946";
-      bgmBtn.style.borderColor = "#e63946";
-      bgmBtn.style.color = "#ffffff";
-    }).catch(err => {
-      console.log("재생 차단:", err);
-      alert("브라우저에서 음악 재생을 허용해 주세요!");
-    });
+    player.playVideo();
+    isPlaying = true;
+    bgmBtn.innerHTML = "📻 SYNTHWAVE RADIO : ON 🔴";
+    bgmBtn.style.background = "#e63946";
+    bgmBtn.style.borderColor = "#e63946";
+    bgmBtn.style.color = "#ffffff";
   } else {
-    bgm.pause();
+    player.pauseVideo();
     isPlaying = false;
     bgmBtn.innerHTML = "📻 SYNTHWAVE RADIO : OFF";
     bgmBtn.style.background = "rgba(69, 162, 158, 0.1)";
