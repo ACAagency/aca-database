@@ -6,15 +6,16 @@
 <title>A.C.A. CENTRAL ARCHIVE</title>
 <style>
   :root {
-    --bg-dark: #050505;
-    --bg-panel: #0f151b;
-    --bg-tab: #0b0c10;
+    --bg-dark: #05070a;
+    --bg-panel: #0b1118;
+    --bg-card: rgba(15, 23, 33, 0.85);
     --border-main: #45a29e;
-    --border-sub: #1f2833;
+    --border-sub: #1f2d3d;
     --text-main: #66fcf1;
-    --text-light: #c5c6c7;
-    --text-mute: #7a7a7a;
+    --text-light: #e0e6ed;
+    --text-mute: #6c7d93;
     --alert-red: #e63946;
+    --accent-gold: #f4a261;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -22,68 +23,166 @@
   body { 
     background-color: var(--bg-dark); 
     color: var(--text-light); 
-    font-family: 'Courier New', Courier, -apple-system, sans-serif; 
-    padding: 15px; 
-    display: flex; 
-    justify-content: center; 
+    font-family: 'Courier New', Courier, -apple-system, BlinkMacSystemFont, monospace; 
     min-height: 100vh; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
     background-image: 
+      radial-gradient(circle at 50% 50%, rgba(15, 23, 33, 0.8) 0%, #030508 100%),
       linear-gradient(rgba(102, 252, 241, 0.03) 1px, transparent 1px),
       linear-gradient(90deg, rgba(102, 252, 241, 0.03) 1px, transparent 1px);
-    background-size: 20px 20px;
-  }
-  
-  /* 메인 터미널 박스 */
-  .terminal-box { 
-    width: 100%; 
-    max-width: 1200px; 
-    background: var(--bg-panel); 
-    border: 1px solid var(--border-main); 
-    border-radius: 4px; 
-    box-shadow: 0 0 20px rgba(69, 162, 158, 0.1); 
-    display: flex; 
-    flex-direction: column; 
-    min-height: 85vh;
-    position: relative;
-    overflow: hidden;
+    background-size: 100% 100%, 30px 30px, 30px 30px;
   }
 
-  /* 스캔라인 효과 */
-  .terminal-box::before {
+  /* CRT 스캔라인 & 비네팅 효과 */
+  body::before {
     content: " ";
-    display: block;
-    position: absolute;
-    top: 0; left: 0; bottom: 0; right: 0;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-    z-index: 100;
-    background-size: 100% 2px, 3px 100%;
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+    z-index: 9999;
+    background-size: 100% 3px, 6px 100%;
     pointer-events: none;
   }
+
+  /* 🔐 로그인 오버레이 화면 */
+  #login-screen {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(3, 5, 8, 0.95);
+    z-index: 5000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s;
+  }
   
-  /* 헤더 & 라디오 버튼 */
+  .login-box {
+    width: 90%;
+    max-width: 440px;
+    background: var(--bg-panel);
+    border: 2px solid var(--border-main);
+    padding: 35px 30px;
+    box-shadow: 0 0 35px rgba(69, 162, 158, 0.25);
+    border-radius: 4px;
+    text-align: center;
+    position: relative;
+  }
+
+  .login-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--text-main);
+    letter-spacing: 2px;
+    margin-bottom: 25px;
+    text-shadow: 0 0 10px rgba(102, 252, 241, 0.5);
+  }
+
+  .login-input {
+    width: 100%;
+    background: rgba(0,0,0,0.6);
+    border: 1px solid var(--border-sub);
+    padding: 14px;
+    color: #fff;
+    font-family: inherit;
+    font-size: 14px;
+    margin-bottom: 15px;
+    outline: none;
+    transition: 0.3s;
+  }
+  .login-input:focus { border-color: var(--text-main); box-shadow: 0 0 10px rgba(102, 252, 241, 0.2); }
+
+  .login-btn {
+    width: 100%;
+    background: rgba(69, 162, 158, 0.15);
+    color: var(--text-main);
+    border: 1px solid var(--border-main);
+    padding: 14px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  .login-btn:hover {
+    background: var(--border-main);
+    color: #000;
+    box-shadow: 0 0 15px rgba(102, 252, 241, 0.6);
+  }
+
+  /* 🖥️ 풀스크린 메인 터미널 레이아웃 */
+  .terminal-box { 
+    width: 96vw; 
+    max-width: 1600px;
+    height: 92vh; 
+    background: var(--bg-panel); 
+    border: 1px solid var(--border-main); 
+    border-radius: 6px; 
+    box-shadow: 0 0 35px rgba(69, 162, 158, 0.15); 
+    display: flex; 
+    flex-direction: column; 
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* 상단 헤더 */
   .header { 
-    background: var(--bg-dark); 
-    padding: 15px 25px; 
+    background: #030508; 
+    padding: 14px 25px; 
     border-bottom: 1px solid var(--border-main); 
     display: flex; 
     justify-content: space-between; 
     align-items: center;
     z-index: 10;
   }
-  
-  .header-logo {
-    font-size: 18px;
-    font-weight: bold;
+
+  .logo-btn {
+    background: none;
+    border: none;
     color: var(--text-main);
+    font-family: inherit;
+    font-size: 17px;
+    font-weight: bold;
     letter-spacing: 2px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.3s;
     text-shadow: 0 0 8px rgba(102, 252, 241, 0.4);
   }
+  .logo-btn:hover {
+    color: #fff;
+    text-shadow: 0 0 15px rgba(102, 252, 241, 0.8);
+    transform: scale(1.02);
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .nav-status {
+    font-size: 12px;
+    padding: 5px 10px;
+    background: rgba(244, 162, 97, 0.1);
+    color: var(--accent-gold);
+    border: 1px solid var(--accent-gold);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  .nav-status:hover { background: var(--accent-gold); color: #000; }
 
   .bgm-btn {
     background: transparent;
     color: var(--text-main);
     border: 1px solid var(--border-main);
-    padding: 6px 14px;
+    padding: 6px 12px;
     font-family: inherit;
     font-size: 12px;
     font-weight: bold;
@@ -92,139 +191,242 @@
   }
   .bgm-btn.active { background: var(--alert-red); border-color: var(--alert-red); color: #fff; }
 
-  /* 메인 네비게이션 (OVERVIEW vs SHOP) */
-  .top-nav {
-    display: flex;
-    background: var(--bg-tab);
-    border-bottom: 1px solid var(--border-sub);
-    z-index: 10;
-  }
-  .nav-tab {
-    flex: 1;
-    padding: 16px;
-    text-align: center;
-    background: transparent;
-    border: none;
-    color: var(--text-mute);
-    font-size: 16px;
-    font-weight: bold;
-    font-family: inherit;
-    cursor: pointer;
-    letter-spacing: 1px;
-    transition: 0.3s;
-  }
-  .nav-tab:hover { color: var(--text-light); }
-  .nav-tab.active {
-    color: var(--text-main);
-    background: rgba(69, 162, 158, 0.05);
-    border-bottom: 2px solid var(--text-main);
-  }
-  .nav-tab.shop-tab { color: #f4a261; }
-  .nav-tab.shop-tab.active { border-bottom-color: #f4a261; background: rgba(244, 162, 97, 0.05); }
-
-  /* 콘텐츠 컨테이너 */
-  .content-container {
+  /* 부드러운 화면 전환 뷰 컨테이너 */
+  .view-container {
     flex: 1;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .view-pane {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
     overflow-y: auto;
     padding: 30px;
-    z-index: 10;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(15px);
+    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
+    display: flex;
+    flex-direction: column;
+  }
+  .view-pane.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
   }
 
-  /* 부드러운 페이드인 모션 */
-  .fade-in { animation: fadeIn 0.4s ease forwards; }
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+  /* 🛒 SHOP (등급 선택기 & 카드 그리드) */
+  .rank-selector { 
+    display: flex; 
+    gap: 10px; 
+    justify-content: center; 
+    margin-bottom: 25px; 
+    flex-wrap: wrap; 
   }
-
-  /* 서브 탭 (Overview 내부용) */
-  .sub-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--border-sub); flex-wrap: wrap; }
-  .sub-btn { background: none; border: none; padding: 10px 15px; color: var(--text-mute); font-family: inherit; cursor: pointer; font-weight: bold; transition: 0.2s; }
-  .sub-btn.active { color: var(--text-main); border-bottom: 2px solid var(--text-main); }
-
-  /* 본문 타이포그래피 */
-  .section-title { color: #fff; font-size: 22px; margin-bottom: 15px; text-shadow: 0 0 5px rgba(255,255,255,0.3); }
-  .desc-box { background: rgba(0,0,0,0.4); border: 1px dashed var(--border-sub); padding: 20px; border-radius: 4px; margin-bottom: 20px; line-height: 1.6; }
-  .highlight { color: var(--alert-red); font-weight: bold; }
-  ul { padding-left: 20px; line-height: 1.7; }
-  li { margin-bottom: 8px; }
-
-  /* SHOP 등급 선택기 */
-  .rank-selector { display: flex; gap: 8px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap; }
   .rank-btn {
-    background: transparent; border: 1px solid var(--border-sub); color: var(--text-mute);
-    padding: 10px 20px; font-family: inherit; font-weight: bold; cursor: pointer; transition: 0.3s;
+    background: rgba(0,0,0,0.5); 
+    border: 1px solid var(--border-sub); 
+    color: var(--text-mute);
+    padding: 10px 20px; 
+    font-family: inherit; 
+    font-weight: bold; 
+    font-size: 13px;
+    cursor: pointer; 
+    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    letter-spacing: 1px;
   }
-  .rank-btn:hover { border-color: #f4a261; color: #f4a261; }
-  .rank-btn.active { background: rgba(244, 162, 97, 0.15); border-color: #f4a261; color: #fff; }
+  .rank-btn:hover { border-color: var(--accent-gold); color: var(--accent-gold); transform: translateY(-2px); }
+  .rank-btn.active { 
+    background: rgba(244, 162, 97, 0.15); 
+    border-color: var(--accent-gold); 
+    color: #fff; 
+    box-shadow: 0 0 15px rgba(244, 162, 97, 0.25);
+  }
 
-  /* 캐릭터 카드 레이아웃 */
-  .char-grid { display: flex; flex-direction: column; gap: 40px; }
-  .char-card {
-    display: flex; gap: 25px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-sub); padding: 20px; border-radius: 4px; transition: 0.3s;
+  .char-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); 
+    gap: 25px; 
+    padding-bottom: 30px;
   }
-  .char-card:hover { border-color: var(--border-main); box-shadow: 0 0 15px rgba(102, 252, 241, 0.1); }
+
+  .char-card {
+    display: flex; 
+    gap: 20px; 
+    background: var(--bg-card); 
+    border: 1px solid var(--border-sub); 
+    padding: 20px; 
+    border-radius: 4px; 
+    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(8px);
+  }
+  .char-card:hover { 
+    border-color: var(--border-main); 
+    box-shadow: 0 0 20px rgba(102, 252, 241, 0.12); 
+    transform: translateY(-3px);
+  }
   
   .char-img-box {
-    width: 250px; flex-shrink: 0; height: 350px; background: #000; border: 1px solid var(--border-sub); position: relative; overflow: hidden;
+    width: 200px; 
+    height: 280px; 
+    flex-shrink: 0; 
+    background: #000; 
+    border: 1px solid var(--border-sub); 
+    overflow: hidden; 
+    position: relative;
   }
-  .char-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.85; transition: 0.5s; filter: grayscale(20%) contrast(1.1); }
-  .char-card:hover .char-img { opacity: 1; transform: scale(1.05); filter: grayscale(0%); }
+  .char-img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    opacity: 0.85; 
+    transition: 0.5s ease; 
+    filter: contrast(1.1); 
+  }
+  .char-card:hover .char-img { opacity: 1; transform: scale(1.06); }
   
   .char-info { flex: 1; display: flex; flex-direction: column; }
-  .char-header { border-bottom: 1px solid var(--border-sub); padding-bottom: 10px; margin-bottom: 15px; }
-  .char-code { color: var(--text-main); font-size: 14px; font-weight: bold; margin-bottom: 5px; }
-  .char-name { color: #fff; font-size: 28px; font-weight: bold; letter-spacing: 1px; }
+  .char-header { border-bottom: 1px solid var(--border-sub); padding-bottom: 8px; margin-bottom: 12px; }
+  .char-code { color: var(--text-main); font-size: 13px; font-weight: bold; margin-bottom: 4px; }
+  .char-name { color: #fff; font-size: 22px; font-weight: bold; }
   
-  .info-row { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
-  .badge { padding: 4px 8px; font-size: 12px; font-weight: bold; border: 1px solid; border-radius: 3px; }
+  .info-row { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+  .badge { padding: 4px 8px; font-size: 11px; font-weight: bold; border: 1px solid; border-radius: 3px; }
   
+  .char-desc-list { 
+    margin-bottom: 15px; 
+    color: var(--text-light); 
+    font-size: 13px; 
+    line-height: 1.6; 
+    padding-left: 18px; 
+  }
+  .char-desc-list li { margin-bottom: 6px; }
+
   .extraction-box {
-    margin-top: auto; background: rgba(230, 57, 70, 0.05); border-left: 3px solid var(--alert-red); padding: 15px;
+    margin-top: auto; 
+    background: rgba(230, 57, 70, 0.08); 
+    border-left: 3px solid var(--alert-red); 
+    padding: 12px 15px;
   }
-  .ext-title { color: var(--alert-red); font-weight: bold; font-size: 14px; margin-bottom: 8px; letter-spacing: 1px; }
+  .ext-title { color: var(--alert-red); font-weight: bold; font-size: 12px; margin-bottom: 6px; letter-spacing: 1px; }
 
-  /* 보안 접근 제한 화면 */
+  /* 🔒 잠금 화면 */
   .locked-screen {
-    text-align: center; padding: 60px 20px; background: rgba(230, 57, 70, 0.05); border: 1px dashed var(--alert-red);
+    text-align: center; 
+    padding: 80px 20px; 
+    background: rgba(230, 57, 70, 0.04); 
+    border: 1px dashed var(--alert-red);
+    grid-column: 1 / -1;
   }
-  .locked-icon { font-size: 40px; margin-bottom: 15px; }
-  .locked-title { color: var(--alert-red); font-size: 24px; font-weight: bold; margin-bottom: 10px; letter-spacing: 2px; }
 
-  @media screen and (max-width: 800px) {
+  /* 📖 OVERVIEW (협회 시스템 / 개요) */
+  .overview-container { max-width: 1000px; margin: 0 auto; width: 100%; }
+  .sub-tabs { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid var(--border-sub); flex-wrap: wrap; }
+  .sub-btn { 
+    background: none; border: none; padding: 10px 18px; color: var(--text-mute); font-family: inherit; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.3s; 
+  }
+  .sub-btn.active { color: var(--text-main); border-bottom: 2px solid var(--text-main); background: rgba(69, 162, 158, 0.05); }
+
+  .section-title { color: #fff; font-size: 22px; margin-bottom: 15px; }
+  .desc-box { background: rgba(0,0,0,0.5); border: 1px dashed var(--border-sub); padding: 20px; border-radius: 4px; margin-bottom: 20px; line-height: 1.7; }
+  .highlight { color: var(--alert-red); font-weight: bold; }
+  .doc-list { padding-left: 20px; line-height: 1.8; font-size: 14px; }
+  .doc-list li { margin-bottom: 8px; }
+
+  @media screen and (max-width: 900px) {
+    .terminal-box { width: 100vw; height: 100vh; border-radius: 0; border: none; }
+    .char-grid { grid-template-columns: 1fr; }
     .char-card { flex-direction: column; }
-    .char-img-box { width: 100%; height: 300px; }
-    .content-container { padding: 15px; }
-    .nav-tab { font-size: 14px; padding: 12px; }
+    .char-img-box { width: 100%; height: 260px; }
+    .view-pane { padding: 15px; }
   }
 </style>
 </head>
 <body>
 
-<!-- 백그라운드 유튜브 BGM -->
+<!-- 🔒 인트라넷 로그인 콘솔 -->
+<div id="login-screen">
+  <div class="login-box">
+    <div style="font-size: 32px; margin-bottom: 10px;">⚠️</div>
+    <div class="login-title">[ A.C.A. INTRANET ACCESS ]</div>
+    <p style="font-size: 12px; color: var(--text-mute); margin-bottom: 20px;">
+      본 시스템은 제3관리국 인가 인원 전용 단말기입니다.<br>무단 침입 시 즉각 처분 프로토콜이 집행됩니다.
+    </p>
+    <input type="text" class="login-input" placeholder="HANDLER ID / CODE" value="ADMIN-HANDLER-08">
+    <input type="password" class="login-input" placeholder="ACCESS KEY" value="••••••••••••">
+    <button class="login-btn" onclick="authenticate()">AUTHENTICATE (접속)</button>
+  </div>
+</div>
+
+<!-- 백그라운드 BGM 플레이어 -->
 <div id="player" style="display:none;"></div>
 
 <div class="terminal-box">
   <div class="header">
-    <div class="header-logo">[ A.C.A. DATABASE ]</div>
-    <button class="bgm-btn" id="bgmBtn" onclick="toggleBGM()">📻 RADIO: OFF</button>
+    <button class="logo-btn" onclick="switchView('overview')">
+      <span>⚙️ [ A.C.A. ]</span>
+      <span style="font-size: 11px; color: var(--text-mute); font-weight: normal;">(협회 개요 보기)</span>
+    </button>
+    
+    <div class="header-right">
+      <button class="nav-status" id="viewToggleBtn" onclick="toggleCurrentView()">CATALOG : SHOP 🔴</button>
+      <button class="bgm-btn" id="bgmBtn" onclick="toggleBGM()">📻 RADIO: OFF</button>
+    </div>
   </div>
 
-  <div class="top-nav">
-    <button class="nav-tab active" onclick="switchMainTab('overview')">A.C.A. OVERVIEW</button>
-    <button class="nav-tab shop-tab" onclick="switchMainTab('shop')">EXTRACTION SHOP</button>
-  </div>
+  <div class="view-container">
+    <!-- 🛒 SHOP 뷰 (기본 메인 화면) -->
+    <div class="view-pane active" id="shop-view">
+      <div class="rank-selector">
+        <button class="rank-btn" onclick="loadRank('D', this)">LEVEL D</button>
+        <button class="rank-btn" onclick="loadRank('C', this)">LEVEL C</button>
+        <button class="rank-btn active" onclick="loadRank('B', this)">LEVEL B</button>
+        <button class="rank-btn" onclick="loadRank('A', this)">LEVEL A</button>
+        <button class="rank-btn" onclick="loadRank('S', this)">LEVEL S</button>
+        <button class="rank-btn" onclick="loadRank('SP', this)">특급(SPECIAL)</button>
+      </div>
+      <div id="rank-content" class="char-grid"></div>
+    </div>
 
-  <div class="content-container fade-in" id="main-content">
-    <!-- 자바스크립트로 화면 전환 렌더링 -->
+    <!-- 📖 OVERVIEW 뷰 (로고 클릭 시 부드럽게 전환) -->
+    <div class="view-pane" id="overview-view">
+      <div class="overview-container">
+        <div class="sub-tabs">
+          <button class="sub-btn active" onclick="loadLore('genesis', this)">협회 시스템 & 기원</button>
+          <button class="sub-btn" onclick="loadLore('structure', this)">시설 및 구속 등급</button>
+          <button class="sub-btn" onclick="loadLore('deepsea', this)">제5 심해 구역</button>
+          <button class="sub-btn" onclick="loadLore('handler', this)">전속 관리관 수칙</button>
+        </div>
+        <div id="lore-content"></div>
+      </div>
+    </div>
   </div>
 </div>
 
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
-/* BGM 로직 */
+/* 🔐 로그인 연출 */
+function authenticate() {
+  const btn = document.querySelector('.login-btn');
+  btn.innerHTML = "VERIFYING SECURITY CLEARANCE...";
+  btn.style.background = "var(--alert-red)";
+  btn.style.color = "#fff";
+  
+  setTimeout(() => {
+    const screen = document.getElementById('login-screen');
+    screen.style.opacity = '0';
+    setTimeout(() => {
+      screen.style.visibility = 'hidden';
+      // 진입 시 자동 라디오 재생 시도
+      toggleBGM();
+    }, 600);
+  }, 500);
+}
+
+/* 📻 BGM 시스템 */
 let player;
 let isPlaying = false;
 let isPlayerReady = false;
@@ -239,7 +441,7 @@ function onYouTubeIframeAPIReady() {
 
 function toggleBGM() {
   const btn = document.getElementById('bgmBtn');
-  if (!isPlayerReady) return alert("오디오 로딩 중입니다. 잠시 후 클릭해주세요.");
+  if (!isPlayerReady) return;
   if (!isPlaying) {
     player.playVideo(); isPlaying = true;
     btn.innerHTML = "📻 RADIO: ON 🔴"; btn.classList.add('active');
@@ -249,59 +451,62 @@ function toggleBGM() {
   }
 }
 
-/* 데이터베이스 (문서 기반 완벽 이식) */
+/* 📖 LORE 데이터 */
 const loreData = {
   genesis: `
     <h2 class="section-title">1. 기원 및 배경 (The Genesis)</h2>
-    <ul>
+    <ul class="doc-list">
       <li>수십 년 전, 원인 불명의 전 지구적 변이성 전염병 <b>'원형 바이러스(Proto-Pathogen)'</b> 발발.</li>
-      <li>해당 전염병은 생물의 진화를 기형적으로 촉진하고, 무생물에 생체 반응 및 영속적 생명을 부여하는 초자연적 현상 유발.</li>
-      <li>인간을 위협하는 지능형 이형체(인외) 대거 탄생.</li>
-      <li>범국가적 비상사태 속에서 이형체를 포획, 격리, 감시하기 위해 설립된 국가 직속 최고 권한 통제 기관이 <b>A.C.A.</b>임.</li>
+      <li>생물의 진화를 기형적으로 촉진하고 무생물에 생체 반응을 부여해 지능형 이형체 대거 탄생.</li>
+      <li>이를 체계적으로 포획, 격리, 감시하기 위해 설립된 국가 직속 최고 권한 통제 기관이 바로 <b>A.C.A.</b>임.</li>
     </ul>
     <div class="desc-box">
       <b>[협회 운영 방침]</b><br>
       인외를 '지능을 가진 생명'으로 취급하지 않음. 국가 안전을 위협하는 <span class="highlight">'잠재적 재앙 물질'이자 '관리 대상 표본'</span>으로만 규정.<br>
-      가혹하고 기계적인 시스템 아래 24시간 감시, 신경 억제, 물리적 구속 합법적 집행.
+      가혹하고 기계적인 통제 아래 24시간 감시, 신경 억제, 물리적 구속이 합법적으로 집행됨.
     </div>
   `,
   structure: `
-    <h2 class="section-title">2. 협회 구조 및 등급</h2>
-    <ul>
+    <h2 class="section-title">2. 시설 구조 및 6단계 구속 등급</h2>
+    <ul class="doc-list">
       <li><b>지상:</b> 철저한 위장막과 다중 보안 방벽으로 둘러싸인 거대 연구 관공서 빌딩 군.</li>
-      <li><b>지하:</b> 수천 미터 깊이까지 뚫려 있는 초대형 방공호/벙커형 요새.</li>
-      <li><b>위험도 등급:</b> 단순 위험도+잠재적 파괴력에 따라 <b>[ D - C - B - A - S - 특급 ]</b> 6단계 분류.</li>
+      <li><b>지하:</b> 수천 미터 깊이까지 수직으로 뚫려 있는 초대형 방공호 및 벙커 형태의 지하 요새.</li>
+      <li><b>정기 완충 시간:</b> 장기 수감 붕괴 방지를 위해 하루 30분간 공용 홀에서 집행 (충돌 시 신경 억제 가스 살포).</li>
     </ul>
     <div class="desc-box">
-      <b>[A.C.A. 최고 통제 본부 시스템]</b><br>
-      - <b>제1 통제국:</b> 무장 진압, 격리실 방벽 유지, 탈출 저지<br>
-      - <b>제2 연구국:</b> 원형 바이러스 추출, 생체 무기 개조, 해부 실험<br>
-      - <b>제3 관리국 (유저 소속):</b> 개체 심리 통제, 완충 프로토콜 집행
+      <b>[A.C.A. 프로토콜: 6단계 구속 수준 체계]</b><br>
+      • <b>Level D:</b> 발목 억제 앵클릿, 위치 추적기<br>
+      • <b>Level C:</b> 경량 신경 억제 목걸이 부착<br>
+      • <b>Level B:</b> 상체 금속 억제 사슬 및 전격 방출형 목걸이<br>
+      • <b>Level A:</b> 척추/관절 초고압 억제 프레임, 분비물 억제 마스크<br>
+      • <b>Level S:</b> 신경 전도 차단 수트, 사지 영구 결박, 24시간 진정제 강제 링거<br>
+      • <b>Level 특급:</b> 감각 완전 차단 캡슐 밀봉, 의식 강제 동면 상태 유지
     </div>
   `,
   deepsea: `
-    <h2 class="section-title">3. 제5 심해 수중 격리구역 (Deep-Sea Sector)</h2>
+    <h2 class="section-title">3. 심해 수중 격리구역 (Deep-Sea Sector)</h2>
     <div class="desc-box">
-      지하 최심부, 초고압과 암흑을 재현한 '초대형 심해 해양 생태 돔'. 평상시엔 나노 강화 격벽으로 수역 분리. 완전 수생 인외 영구 격리 구역.
+      지하 최심부, 초고압과 칠흑 같은 암흑을 재현한 '초대형 심해 인공 해역'. 완전 수생 인외(아야나, 지세르 등) 영구 격리.
     </div>
-    <ul>
-      <li><b>[수중 개방 프로토콜 (Deep-Purge)]:</b> 하루 1회, 40분간 격벽이 수납되며 거대 해역 하나로 합류.</li>
-      <li>전담 관리인은 '초고압 내압 잠수 슈트'를 입고 다이빙하여 1:1 접촉/검진 진행.</li>
-      <li><b>비상 안전장치:</b> 물리적 가해 발생 시 즉각 전 수역 <span class="highlight">'고농도 신경 마비 전도 전류' 및 '청각 충격파'</span> 방출하여 강제 기절시킴.</li>
+    <ul class="doc-list">
+      <li><b>[수중 개방 프로토콜 (Deep-Purge)]:</b> 하루 1회, 40분간 나노 격벽이 수납되어 거대 해역으로 합류.</li>
+      <li><b>관리인 수중 진입:</b> 초고압 내압 잠수 슈트를 착용하고 다이빙하여 담당 개체와 1:1 물리 접촉 검진.</li>
+      <li><b>비상 안전장치:</b> 유혈 사태 발생 시 전 수역에 즉각 <span class="highlight">'고농도 신경 마비 전도 전류' 및 '수중 청각 충격파'</span> 방출하여 강제 기절.</li>
     </ul>
   `,
   handler: `
-    <h2 class="section-title">4. 관리인 (Specialized Handler)</h2>
+    <h2 class="section-title">4. 전속 관리관 (Specialized Handler)</h2>
     <div class="desc-box">
-      연구원(해부/실험)이나 경비 요원(무력 제압)과 분리된 직군. 인외의 '정신 붕괴와 폭주'를 막기 위해 신체 접촉, 수분 공급 등을 전담하는 유일한 창구. A급 이상 배정자는 목숨을 담보로 한 고위험 현장직.
+      연구원(해부/실험)이나 경비 요원(무력 진압)과 분리된 직군. 인외의 '정신적 붕괴와 폭주'를 막기 위해 신체 접촉, 수분 공급 등을 전담하는 유일한 창구. A급 이상 담당은 목숨을 담보로 한 고위험 현장직.
     </div>
-    <ul>
-      <li><b>비상 바이오 패치:</b> 독성/공격 노출 시 10초 내 해독하는 즉각 주사기.</li>
-      <li><b><span class="highlight">Kill Switch (처분 권한 코드):</span></b> ID카드/태블릿에 내장. 담당 인외 억제구에 초고전압을 방출시켜 즉각 심정지/기절 유도. 인외 불신과 혐오의 핵심 원인.</li>
+    <ul class="doc-list">
+      <li><b>비상 바이오 패치:</b> 독성 물질 노출 시 10초 내 해독하는 즉각 주사기.</li>
+      <li><b><span class="highlight">Kill Switch (처분 권한 코드):</span></b> ID 카드/태블릿에 내장. 담당 인외의 억제구에 초고전압을 방출시켜 심정지나 기절 유도 (인외 불신의 핵심 원인).</li>
     </ul>
   `
 };
 
+/* 🗂️ 캐릭터 DB */
 const characters = {
   "D": [
     {
@@ -309,49 +514,49 @@ const characters = {
       species: "D급 인어형 인외", img: "./ayana.png",
       appearance: "182cm, 건장한 남성 상체와 푸른 물고기 하반신. 뾰족한 귀와 지느러미, 흑발에 맑은 푸른 눈.",
       desc: "극도로 조용하고 무기력함. 온순하고 정중한 존댓말 구사. 호감이 생기면 숨김없이 헌신적 애정 표현.",
-      gimmick: "극심한 고통이나 감정 격앙 시 입으로 피와 진주를 토해냄. 분노 시 눈동자가 연한 노란색으로 변이.",
-      extraction: "극도의 고통에서 뱉어내는 <b>'진주(초고밀도 바이러스 결정체)'</b> 및 특수 혈액."
+      gimmick: "극심한 고통/감정 격앙 시 입으로 피와 진주를 토해냄 (치부로 여김). 분노 시 눈동자가 연한 노란색으로 변이.",
+      extraction: "극도의 고통에서 뱉어내는 <b>'진주(초고밀도 바이러스 결정체)'</b> 및 고순도 생체 혈액."
     }
   ],
-  "C": [], // 미등록
+  "C": [],
   "B": [
     {
       code: "B-012", name: "지세르 (Giselle)", rank: "Level B", location: "심해 돔 수중격리",
       species: "B급 해파리형 인외", img: "./giselle.png",
       appearance: "소년형 체형, 머리에 모자 형태의 해파리 갓. 젤리처럼 반투명한 피부 안으로 뼈와 내장이 투과됨.",
-      desc: "오만방자하고 유치함 (반말 구사). 본심 찔리면 당황하며 꼬리 내림. 애정을 심술과 집착으로 서툴게 표현.",
-      gimmick: "부정적 감정 시 독이 활성화되며 코어 발광. '아무리 화나도 신경독을 먼저 쓰진 않는다'는 자존심 룰 존재.",
-      extraction: "발광 코어에서 정기적으로 추출하는 <b>'초고농도 신경 마비 독소'</b>."
+      desc: "오만방자하고 유치한 반말 구사. 약점 찔리면 당황하며 꼬리 내림. 애정을 심술과 집착으로 서툴게 표현.",
+      gimmick: "부정적 감정 시 독 활성화 및 코어 발광. '아무리 싫어도 신경독을 먼저 쓰진 않는다'는 자존심 룰 존재.",
+      extraction: "발광 코어에서 정기 추출하는 <b>'초고농도 신경 마비 독소'</b>."
     },
     {
       code: "B-041", name: "데젤 (Dezel)", rank: "Level B (S급 구속)", location: "지상구역-제13격리실",
       species: "B급 신성 오염형 인외", img: "./dezel.png",
-      appearance: "흑발, 적/녹 오드아이. 검게 그을린 헤일로와 거대하고 찢긴 잿빛 날개. 무거운 신성 억제 사슬 착용.",
+      appearance: "흑발, 적/녹 오드아이, 그을린 헤일로와 찢긴 잿빛 날개. 무거운 신성 억제 사슬 착용.",
       desc: "오만하고 냉소적. 인간과 통제관 혐오. 낮고 서늘한 저음의 반말 사용.",
-      gimmick: "아이리스가 타인에게 메스를 들이대면 거친 날갯짓으로 가로막음. 구속구에 묶여있어도 절대 굴복 안 함.",
-      extraction: "신성 오염 깃털 및 이형체 제압용 파장 물질 (추정)."
+      gimmick: "아이리스가 메스를 들이대면 거친 날갯짓으로 가로막음. 구속구에 묶여있어도 절대 굴복 안 함.",
+      extraction: "신성 오염 깃털 및 이형체 파장 억제 물질 (추정)."
     }
   ],
   "A": [
     {
       code: "A-084", name: "카르에 (Karue)", rank: "Level A", location: "지상구역-제7격리실",
       species: "A급 문어형 인외", img: "./karue.png",
-      appearance: "물기에 젖은 적갈색 머리칼, 초록색 세로동공, 주근깨. 지상에 노출되면 피부가 터 투명 점액질 흘림.",
-      desc: "독기 어린 분노의 반말. 본체는 유저를 '배신자'라 혐오하지만, 독립 신경계를 가진 8개의 촉수는 유저에게 애절하게 매달리는 모순 발현.",
-      gimmick: "촉수는 뼈를 으스러뜨리는 완력을 가졌으며, 척추 흡반을 통해 고압의 암적색 환각 안개 분출.",
+      appearance: "물기에 젖은 적갈색 머리칼, 초록색 세로동공, 주근깨. 지상 공기 노출 시 피부가 터 점액질 분출.",
+      desc: "독기 어린 분노의 반말. 본체는 '배신자'라 밀어내지만 독립 신경계의 8개 촉수는 유저에게 애절하게 매달림.",
+      gimmick: "성인 뼈를 으스러뜨리는 촉수 완력. 척추 흡반을 통해 고압의 암적색 환각/질식성 먹물 안개 분출.",
       extraction: "척추에서 분출되는 <b>'환각/시야 차단 먹물'</b> 및 촉수 표면의 경화 조직."
     },
     {
       code: "A-019", name: "아이리스 (Iris)", rank: "Level A (S급 구속)", location: "지상구역-제28격리실",
       species: "A급 개조형 인외", img: "./iris.png",
-      appearance: "흑발에 흰색 브릿지, 풀린 눈빛, 기괴할 정도로 다정한 미소. 피 묻은 의사 가운 착용.",
-      desc: "나긋나긋한 존댓말을 쓰지만 사고방식이 뒤틀린 사이코패스 의사.",
-      gimmick: "등 뒤의 붉은 생체 기계 촉수와 메스를 쥔 수술팔(서브 암). 관리인을 '자신이 치료할 환자' 취급하며 메스를 들이댐.",
-      extraction: "생체 기계 촉수의 재생 조직 및 개조 바이러스 혈청 (추정)."
+      appearance: "흑발에 흰색 브릿지, 풀린 눈빛, 기괴한 미소의 사이코패스 의사. 피 묻은 가운 착용.",
+      desc: "나긋나긋한 존댓말을 쓰며 관리인을 '치료해야 할 특별한 환자' 취급.",
+      gimmick: "등 뒤의 붉은 생체 기계 촉수와 메스를 쥔 수술팔. 데젤이 끼어들 때마다 기계촉수를 짤깍거림.",
+      extraction: "생체 기계 촉수의 재생 조직 및 개조 바이러스 혈청."
     }
   ],
-  "S": [], // 미등록
-  "SP": [] // 미등록 (특급)
+  "S": [],
+  "SP": []
 };
 
 const badgeStyles = {
@@ -359,57 +564,47 @@ const badgeStyles = {
   "Level C": "color: #2a9d8f; border-color: #2a9d8f;",
   "Level B": "color: #e9c46a; border-color: #e9c46a;",
   "Level A": "color: #f4a261; border-color: #f4a261;",
-  "Level S": "color: #e63946; border-color: #e63946;"
+  "Level S": "color: #e63946; border-color: #e63946;",
+  "Level 특급": "color: #ff0055; border-color: #ff0055; text-shadow: 0 0 8px rgba(255, 0, 85, 0.6); box-shadow: 0 0 8px rgba(255, 0, 85, 0.3);"
 };
+/* 뷰 전환 로직 */
+let currentView = 'shop';
 
-/* 화면 렌더링 함수 */
-function switchMainTab(tab) {
-  document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
-  document.querySelector(tab === 'overview' ? '.nav-tab:not(.shop-tab)' : '.shop-tab').classList.add('active');
-  
-  const content = document.getElementById('main-content');
-  content.innerHTML = '';
-  
-  // 리렌더링 페이드 애니메이션 트릭
-  content.classList.remove('fade-in');
-  void content.offsetWidth; 
-  content.classList.add('fade-in');
+function switchView(viewName) {
+  currentView = viewName;
+  const shopPane = document.getElementById('shop-view');
+  const overviewPane = document.getElementById('overview-view');
+  const toggleBtn = document.getElementById('viewToggleBtn');
 
-  if (tab === 'overview') {
-    content.innerHTML = `
-      <div class="sub-tabs">
-        <button class="sub-btn active" onclick="loadLore('genesis', this)">협회 시스템</button>
-        <button class="sub-btn" onclick="loadLore('structure', this)">시설 및 구조</button>
-        <button class="sub-btn" onclick="loadLore('deepsea', this)">제5 심해 구역</button>
-        <button class="sub-btn" onclick="loadLore('handler', this)">관리인 수칙</button>
-      </div>
-      <div id="lore-content">${loreData.genesis}</div>
-    `;
+  if (viewName === 'shop') {
+    overviewPane.classList.remove('active');
+    setTimeout(() => { shopPane.classList.add('active'); }, 150);
+    toggleBtn.innerHTML = "CATALOG : SHOP 🔴";
+    toggleBtn.style.color = "var(--accent-gold)";
+    toggleBtn.style.borderColor = "var(--accent-gold)";
   } else {
-    content.innerHTML = `
-      <div class="rank-selector">
-        <button class="rank-btn" onclick="loadRank('D', this)">LEVEL D</button>
-        <button class="rank-btn" onclick="loadRank('C', this)">LEVEL C</button>
-        <button class="rank-btn active" onclick="loadRank('B', this)">LEVEL B</button>
-        <button class="rank-btn" onclick="loadRank('A', this)">LEVEL A</button>
-        <button class="rank-btn" onclick="loadRank('S', this)">LEVEL S</button>
-        <button class="rank-btn" onclick="loadRank('SP', this)">특급(SPECIAL)</button>
-      </div>
-      <div id="rank-content" class="char-grid"></div>
-    `;
-    loadRank('B', document.querySelector('.rank-selector .rank-btn:nth-child(3)'));
+    shopPane.classList.remove('active');
+    setTimeout(() => { overviewPane.classList.add('active'); }, 150);
+    toggleBtn.innerHTML = "ARCHIVE : OVERVIEW ⚙️";
+    toggleBtn.style.color = "var(--text-main)";
+    toggleBtn.style.borderColor = "var(--text-main)";
+    loadLore('genesis', document.querySelector('.sub-btn'));
   }
+}
+
+function toggleCurrentView() {
+  switchView(currentView === 'shop' ? 'overview' : 'shop');
 }
 
 function loadLore(key, btnElem) {
   document.querySelectorAll('.sub-btn').forEach(btn => btn.classList.remove('active'));
-  btnElem.classList.add('active');
+  if (btnElem) btnElem.classList.add('active');
   document.getElementById('lore-content').innerHTML = loreData[key];
 }
 
 function loadRank(rank, btnElem) {
   document.querySelectorAll('.rank-btn').forEach(btn => btn.classList.remove('active'));
-  btnElem.classList.add('active');
+  if (btnElem) btnElem.classList.add('active');
   
   const container = document.getElementById('rank-content');
   const list = characters[rank];
@@ -417,9 +612,11 @@ function loadRank(rank, btnElem) {
   if (!list || list.length === 0) {
     container.innerHTML = `
       <div class="locked-screen">
-        <div class="locked-icon">🔒</div>
-        <div class="locked-title">[ ACCESS RESTRICTED : DATA INSUFFICIENT ]</div>
-        <p style="color: var(--text-mute); line-height: 1.6;">
+        <div style="font-size: 38px; margin-bottom: 15px;">🔒</div>
+        <div style="color: var(--alert-red); font-size: 20px; font-weight: bold; margin-bottom: 10px;">
+          [ ACCESS RESTRICTED : DATA INSUFFICIENT ]
+        </div>
+        <p style="color: var(--text-mute); font-size: 13px; line-height: 1.6;">
           경고: 해당 구속 등급의 표본 아카이브는 현재 갱신 중이거나 보안 승인이 거부되었습니다.<br>
           담당 관리관의 보안 승인 코드를 재확인하십시오.
         </p>
@@ -446,14 +643,14 @@ function loadRank(rank, btnElem) {
             <span class="badge" style="color:#c5c6c7; border-color:#c5c6c7;">${char.species}</span>
             <span class="badge" style="color:#7a7a7a; border-color:#7a7a7a;">${char.location}</span>
           </div>
-          <ul style="margin-bottom: 20px; color: var(--text-light); font-size: 14px;">
+          <ul class="char-desc-list">
             <li><b>외형:</b> ${char.appearance}</li>
             <li><b>성격:</b> ${char.desc}</li>
             <li><b>기믹:</b> ${char.gimmick}</li>
           </ul>
           <div class="extraction-box">
             <div class="ext-title">⚠️ EXTRACTION RESOURCE (착취 자원)</div>
-            <div style="color: #d3d3d3; font-size: 14px;">${char.extraction}</div>
+            <div style="color: #d3d3d3; font-size: 13px;">${char.extraction}</div>
           </div>
         </div>
       </div>
@@ -462,9 +659,8 @@ function loadRank(rank, btnElem) {
   container.innerHTML = html;
 }
 
-// 초기 로드
 window.addEventListener('DOMContentLoaded', () => {
-  switchMainTab('overview');
+  loadRank('B', document.querySelector('.rank-btn.active'));
 });
 </script>
 </body>
