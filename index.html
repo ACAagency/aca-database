@@ -6,16 +6,17 @@
 <title>A.C.A. CENTRAL ARCHIVE</title>
 <style>
   :root {
-    --bg-dark: #05070a;
-    --bg-panel: #0b1118;
-    --bg-card: rgba(15, 23, 33, 0.85);
+    --bg-dark: #03060a;
+    --bg-panel: rgba(10, 16, 24, 0.85);
+    --bg-card: rgba(13, 22, 33, 0.7);
     --border-main: #45a29e;
-    --border-sub: #1f2d3d;
+    --border-sub: rgba(69, 162, 158, 0.2);
     --text-main: #66fcf1;
-    --text-light: #e0e6ed;
-    --text-mute: #6c7d93;
+    --text-light: #d8e2dc;
+    --text-mute: #5c6f84;
     --alert-red: #e63946;
     --accent-gold: #f4a261;
+    --hud-cyan: #00f0ff;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -31,73 +32,69 @@
     overflow-x: hidden;
     position: relative;
     background-image: 
-      radial-gradient(circle at 50% 50%, rgba(15, 23, 33, 0.8) 0%, #030508 100%),
-      linear-gradient(rgba(102, 252, 241, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(102, 252, 241, 0.03) 1px, transparent 1px);
-    background-size: 100% 100%, 30px 30px, 30px 30px;
+      radial-gradient(circle at 50% 50%, rgba(15, 23, 33, 0.9) 0%, #020406 100%),
+      linear-gradient(rgba(102, 252, 241, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(102, 252, 241, 0.04) 1px, transparent 1px);
+    background-size: 100% 100%, 25px 25px, 25px 25px;
   }
 
-  /* 📡 배경 심해 레이더 파동 애니메이션 */
+  /* 📡 배경 레이더 파동 */
   .radar-pulse {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 200px;
-    height: 200px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
-    border: 1px solid rgba(102, 252, 241, 0.2);
-    box-shadow: 0 0 20px rgba(102, 252, 241, 0.1);
-    animation: pulseRing 6s infinite ease-out;
+    border: 1px solid rgba(102, 252, 241, 0.15);
+    box-shadow: 0 0 30px rgba(102, 252, 241, 0.05);
+    animation: pulseRing 7s infinite cubic-bezier(0.1, 0.8, 0.3, 1);
     pointer-events: none;
     z-index: 1;
   }
-  .radar-pulse:nth-child(2) { animation-delay: 2s; }
-  .radar-pulse:nth-child(3) { animation-delay: 4s; }
+  .radar-pulse:nth-child(2) { animation-delay: 2.3s; }
+  .radar-pulse:nth-child(3) { animation-delay: 4.6s; }
 
   @keyframes pulseRing {
-    0% { width: 100px; height: 100px; opacity: 0.8; }
-    100% { width: 1400px; height: 1400px; opacity: 0; }
+    0% { width: 50px; height: 50px; opacity: 0.8; }
+    100% { width: 1600px; height: 1600px; opacity: 0; }
   }
 
-  /* 🟢 생체 인식 스캔 레이저 바 (위아래 반복 이동) */
+  /* 🟢 레이저 스캐너 */
   .scanner-line {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, #66fcf1 20%, #45a29e 50%, #66fcf1 80%, transparent);
-    box-shadow: 0 0 15px #66fcf1, 0 0 25px #45a29e;
-    opacity: 0.45;
-    z-index: 90;
+    top: 0; left: 0; width: 100%; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--hud-cyan) 30%, #fff 50%, var(--hud-cyan) 70%, transparent);
+    box-shadow: 0 0 15px var(--hud-cyan), 0 0 30px var(--text-main);
+    opacity: 0.3;
+    z-index: 80;
     pointer-events: none;
-    animation: scanMove 7s ease-in-out infinite alternate;
+    animation: scanMove 8s ease-in-out infinite alternate;
   }
-
   @keyframes scanMove {
     0% { top: 0%; opacity: 0.1; }
-    15% { opacity: 0.6; }
-    85% { opacity: 0.6; }
-    100% { top: calc(100% - 3px); opacity: 0.1; }
+    20% { opacity: 0.5; }
+    80% { opacity: 0.5; }
+    100% { top: calc(100% - 2px); opacity: 0.1; }
   }
 
-  /* CRT 스캔라인 & 비네팅 효과 */
+  /* CRT 스캔라인 */
   body::before {
     content: " ";
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
     z-index: 9999;
     background-size: 100% 3px, 6px 100%;
     pointer-events: none;
   }
 
-  /* 🔐 로그인 오버레이 */
+  /* 🔐 로그인 화면 */
   #login-screen {
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
-    background: rgba(3, 5, 8, 0.95);
+    background: rgba(2, 4, 7, 0.96);
     z-index: 5000;
     display: flex;
     justify-content: center;
@@ -106,299 +103,189 @@
   }
   
   .login-box {
-    width: 90%;
-    max-width: 440px;
+    width: 90%; max-width: 440px;
     background: var(--bg-panel);
-    border: 2px solid var(--border-main);
-    padding: 35px 30px;
-    box-shadow: 0 0 35px rgba(69, 162, 158, 0.25);
-    border-radius: 4px;
+    border: 1px solid var(--border-main);
+    padding: 40px 30px;
+    box-shadow: 0 0 40px rgba(69, 162, 158, 0.2);
+    border-radius: 2px;
     text-align: center;
     position: relative;
-    z-index: 5001;
+    backdrop-filter: blur(15px);
   }
+  /* 테크니컬 코너 데코 (+) */
+  .login-box::before { content: "+"; position: absolute; top: -10px; left: -8px; color: var(--text-main); font-size: 18px; }
+  .login-box::after { content: "+"; position: absolute; bottom: -12px; right: -8px; color: var(--text-main); font-size: 18px; }
 
-  .login-title {
-    font-size: 20px;
-    font-weight: bold;
-    color: var(--text-main);
-    letter-spacing: 2px;
-    margin-bottom: 25px;
-    text-shadow: 0 0 10px rgba(102, 252, 241, 0.5);
-  }
+  .login-title { font-size: 19px; font-weight: bold; color: var(--text-main); letter-spacing: 3px; margin-bottom: 25px; text-shadow: 0 0 10px rgba(102, 252, 241, 0.5); }
+  .login-input { width: 100%; background: rgba(0,0,0,0.7); border: 1px solid var(--border-sub); padding: 14px; color: #fff; font-family: inherit; font-size: 13px; margin-bottom: 15px; outline: none; transition: 0.3s; }
+  .login-input:focus { border-color: var(--text-main); box-shadow: 0 0 10px rgba(102, 252, 241, 0.25); }
+  .login-btn { width: 100%; background: rgba(69, 162, 158, 0.15); color: var(--text-main); border: 1px solid var(--border-main); padding: 14px; font-family: inherit; font-size: 14px; font-weight: bold; letter-spacing: 2px; cursor: pointer; transition: 0.3s; }
+  .login-btn:hover { background: var(--border-main); color: #000; box-shadow: 0 0 20px rgba(102, 252, 241, 0.6); }
 
-  .login-input {
-    width: 100%;
-    background: rgba(0,0,0,0.6);
-    border: 1px solid var(--border-sub);
-    padding: 14px;
-    color: #fff;
-    font-family: inherit;
-    font-size: 14px;
-    margin-bottom: 15px;
-    outline: none;
-    transition: 0.3s;
-  }
-  .login-input:focus { border-color: var(--text-main); box-shadow: 0 0 10px rgba(102, 252, 241, 0.2); }
-
-  .login-btn {
-    width: 100%;
-    background: rgba(69, 162, 158, 0.15);
-    color: var(--text-main);
-    border: 1px solid var(--border-main);
-    padding: 14px;
-    font-family: inherit;
-    font-size: 15px;
-    font-weight: bold;
-    letter-spacing: 2px;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-  .login-btn:hover {
-    background: var(--border-main);
-    color: #000;
-    box-shadow: 0 0 15px rgba(102, 252, 241, 0.6);
-  }
-
-  /* 🖥️ 풀스크린 메인 터미널 레이아웃 */
+  /* 🖥️ 메인 터미널 레이아웃 */
   .terminal-box { 
-    width: 96vw; 
-    max-width: 1600px;
-    height: 92vh; 
+    width: 96vw; max-width: 1600px; height: 92vh; 
     background: var(--bg-panel); 
     border: 1px solid var(--border-main); 
-    border-radius: 6px; 
-    box-shadow: 0 0 35px rgba(69, 162, 158, 0.15); 
-    display: flex; 
-    flex-direction: column; 
-    overflow: hidden;
-    position: relative;
-    z-index: 10;
+    box-shadow: 0 0 40px rgba(0, 240, 255, 0.08); 
+    display: flex; flex-direction: column; 
+    overflow: hidden; position: relative; z-index: 10;
+    backdrop-filter: blur(20px);
   }
 
   .header { 
-    background: #030508; 
+    background: rgba(2, 5, 9, 0.95); 
     padding: 14px 25px; 
-    border-bottom: 1px solid var(--border-main); 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center;
-    z-index: 20;
+    border-bottom: 1px solid var(--border-sub); 
+    display: flex; justify-content: space-between; align-items: center; z-index: 20; 
   }
 
   .logo-btn {
-    background: none;
-    border: none;
-    color: var(--text-main);
-    font-family: inherit;
-    font-size: 17px;
-    font-weight: bold;
-    letter-spacing: 2px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    transition: 0.3s;
-    text-shadow: 0 0 8px rgba(102, 252, 241, 0.4);
+    background: none; border: none; color: var(--text-main); font-family: inherit; font-size: 16px; font-weight: bold; letter-spacing: 2px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: 0.3s;
   }
-  .logo-btn:hover {
-    color: #fff;
-    text-shadow: 0 0 15px rgba(102, 252, 241, 0.8);
-    transform: scale(1.02);
-  }
+  .logo-btn:hover { color: #fff; text-shadow: 0 0 15px var(--text-main); transform: scale(1.02); }
 
-  .header-right {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-  }
-
-  .nav-status {
-    font-size: 12px;
-    padding: 5px 10px;
-    background: rgba(244, 162, 97, 0.1);
-    color: var(--accent-gold);
-    border: 1px solid var(--accent-gold);
-    border-radius: 3px;
-    cursor: pointer;
-    transition: 0.3s;
-  }
+  .header-right { display: flex; align-items: center; gap: 15px; }
+  .nav-status { font-size: 12px; padding: 6px 14px; background: rgba(244, 162, 97, 0.1); color: var(--accent-gold); border: 1px solid var(--accent-gold); border-radius: 2px; cursor: pointer; transition: 0.3s; font-family: inherit; font-weight: bold; letter-spacing: 1px; }
   .nav-status:hover { background: var(--accent-gold); color: #000; }
-
-  .bgm-btn {
-    background: transparent;
-    color: var(--text-main);
-    border: 1px solid var(--border-main);
-    padding: 6px 12px;
-    font-family: inherit;
-    font-size: 12px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-  }
+  .bgm-btn { background: transparent; color: var(--text-main); border: 1px solid var(--border-sub); padding: 6px 12px; font-family: inherit; font-size: 12px; font-weight: bold; cursor: pointer; transition: 0.3s; }
   .bgm-btn.active { background: var(--alert-red); border-color: var(--alert-red); color: #fff; }
 
-  .view-container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    position: relative;
-  }
+  /* 뷰 스위처 */
+  .view-container { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
+  .view-pane { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow-y: auto; padding: 25px 30px; opacity: 0; visibility: hidden; transform: translateY(12px); transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; }
+  .view-pane.active { opacity: 1; visibility: visible; transform: translateY(0); }
 
-  .view-pane {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    overflow-y: auto;
-    padding: 30px;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(15px);
-    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
-    display: flex;
-    flex-direction: column;
-    z-index: 10;
-  }
-  .view-pane.active {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
+  /* 🛒 SHOP (카탈로그) */
+  .rank-selector { display: flex; gap: 8px; justify-content: center; margin-bottom: 25px; flex-wrap: wrap; }
+  .rank-btn { background: rgba(0,0,0,0.6); border: 1px solid var(--border-sub); color: var(--text-mute); padding: 9px 18px; font-family: inherit; font-weight: bold; font-size: 12px; cursor: pointer; transition: 0.3s; letter-spacing: 1px; }
+  .rank-btn:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+  .rank-btn.active { background: rgba(244, 162, 97, 0.15); border-color: var(--accent-gold); color: #fff; box-shadow: 0 0 15px rgba(244, 162, 97, 0.3); }
 
-  /* 🛒 SHOP */
-  .rank-selector { 
-    display: flex; 
-    gap: 10px; 
-    justify-content: center; 
-    margin-bottom: 25px; 
-    flex-wrap: wrap; 
-  }
-  .rank-btn {
-    background: rgba(0,0,0,0.5); 
-    border: 1px solid var(--border-sub); 
-    color: var(--text-mute);
-    padding: 10px 20px; 
-    font-family: inherit; 
-    font-weight: bold; 
-    font-size: 13px;
-    cursor: pointer; 
-    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    letter-spacing: 1px;
-  }
-  .rank-btn:hover { border-color: var(--accent-gold); color: var(--accent-gold); transform: translateY(-2px); }
-  .rank-btn.active { 
-    background: rgba(244, 162, 97, 0.15); 
-    border-color: var(--accent-gold); 
-    color: #fff; 
-    box-shadow: 0 0 15px rgba(244, 162, 97, 0.25);
-  }
-
-  .char-grid { 
-    display: grid; 
-    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); 
-    gap: 25px; 
-    padding-bottom: 30px;
-  }
-
-  .char-card {
-    display: flex; 
-    gap: 20px; 
-    background: var(--bg-card); 
-    border: 1px solid var(--border-sub); 
-    padding: 20px; 
-    border-radius: 4px; 
-    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    backdrop-filter: blur(8px);
-  }
-  .char-card:hover { 
-    border-color: var(--border-main); 
-    box-shadow: 0 0 20px rgba(102, 252, 241, 0.12); 
-    transform: translateY(-3px);
-  }
+  .char-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 1fr)); gap: 25px; padding-bottom: 30px; }
+  .char-card { display: flex; gap: 20px; background: var(--bg-card); border: 1px solid var(--border-sub); padding: 20px; border-radius: 2px; transition: 0.3s; position: relative; }
+  .char-card:hover { border-color: var(--border-main); box-shadow: 0 0 25px rgba(69, 162, 158, 0.15); transform: translateY(-3px); }
   
-  .char-img-box {
-    width: 200px; 
-    height: 280px; 
-    flex-shrink: 0; 
-    background: #000; 
-    border: 1px solid var(--border-sub); 
-    overflow: hidden; 
-    position: relative;
-  }
-  .char-img { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
-    opacity: 0.85; 
-    transition: 0.5s ease; 
-    filter: contrast(1.1); 
-  }
-  .char-card:hover .char-img { opacity: 1; transform: scale(1.06); }
+  .char-img-box { width: 190px; height: 270px; flex-shrink: 0; background: #000; border: 1px solid var(--border-sub); overflow: hidden; position: relative; }
+  .char-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.85; transition: 0.5s ease; filter: contrast(1.05); }
+  .char-card:hover .char-img { opacity: 1; transform: scale(1.05); }
   
   .char-info { flex: 1; display: flex; flex-direction: column; }
   .char-header { border-bottom: 1px solid var(--border-sub); padding-bottom: 8px; margin-bottom: 12px; }
-  .char-code { color: var(--text-main); font-size: 13px; font-weight: bold; margin-bottom: 4px; }
+  .char-code { color: var(--text-main); font-size: 12px; font-weight: bold; margin-bottom: 4px; }
   .char-name { color: #fff; font-size: 22px; font-weight: bold; }
   
   .info-row { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
-  .badge { padding: 4px 8px; font-size: 11px; font-weight: bold; border: 1px solid; border-radius: 3px; }
+  .badge { padding: 3px 8px; font-size: 11px; font-weight: bold; border: 1px solid; border-radius: 2px; }
   
-  .char-desc-list { 
-    margin-bottom: 15px; 
-    color: var(--text-light); 
-    font-size: 13px; 
-    line-height: 1.6; 
-    padding-left: 18px; 
+  .char-desc-list { margin-bottom: 15px; color: var(--text-light); font-size: 13px; line-height: 1.6; padding-left: 18px; }
+  .char-desc-list li { margin-bottom: 5px; }
+
+  .extraction-box { margin-top: auto; background: rgba(230, 57, 70, 0.08); border-left: 3px solid var(--alert-red); padding: 12px 15px; }
+  .ext-title { color: var(--alert-red); font-weight: bold; font-size: 11px; margin-bottom: 5px; letter-spacing: 1px; }
+
+  .locked-screen { text-align: center; padding: 80px 20px; background: rgba(230, 57, 70, 0.04); border: 1px dashed var(--alert-red); grid-column: 1 / -1; }
+
+  /* 🗺️ INTERACTIVE MAP & OVERVIEW */
+  .overview-container { max-width: 1400px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 25px; }
+  
+  .sub-tabs { display: flex; gap: 8px; border-bottom: 1px solid var(--border-sub); flex-wrap: wrap; margin-bottom: 10px; }
+  .sub-btn { background: none; border: none; padding: 10px 18px; color: var(--text-mute); font-family: inherit; cursor: pointer; font-weight: bold; font-size: 13px; transition: 0.3s; letter-spacing: 1px; }
+  .sub-btn.active { color: var(--text-main); border-bottom: 2px solid var(--text-main); background: rgba(69, 162, 158, 0.08); }
+
+  /* 지도 전술 HUD 그리드 */
+  .map-hud-container {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 25px;
+    background: rgba(5, 9, 15, 0.7);
+    border: 1px solid var(--border-sub);
+    padding: 25px;
+    border-radius: 2px;
+    position: relative;
   }
-  .char-desc-list li { margin-bottom: 6px; }
+  .map-hud-container::before { content: "+ [TACTICAL SECTOR MAP]"; position: absolute; top: -10px; left: 15px; background: var(--bg-dark); padding: 0 10px; font-size: 11px; color: var(--text-main); font-weight: bold; }
 
-  .extraction-box {
-    margin-top: auto; 
-    background: rgba(230, 57, 70, 0.08); 
-    border-left: 3px solid var(--alert-red); 
-    padding: 12px 15px;
-  }
-  .ext-title { color: var(--alert-red); font-weight: bold; font-size: 12px; margin-bottom: 6px; letter-spacing: 1px; }
-
-  .locked-screen {
-    text-align: center; 
-    padding: 80px 20px; 
-    background: rgba(230, 57, 70, 0.04); 
-    border: 1px dashed var(--alert-red);
-    grid-column: 1 / -1;
+  /* 수직 단면 지도 뷰어 */
+  .map-blueprint {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    justify-content: center;
   }
 
-  /* 📖 OVERVIEW */
-  .overview-container { max-width: 1000px; margin: 0 auto; width: 100%; }
-  .sub-tabs { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid var(--border-sub); flex-wrap: wrap; }
-  .sub-btn { 
-    background: none; border: none; padding: 10px 18px; color: var(--text-mute); font-family: inherit; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.3s; 
+  .sector-node {
+    background: rgba(13, 22, 33, 0.8);
+    border: 1px solid var(--border-sub);
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
   }
-  .sub-btn.active { color: var(--text-main); border-bottom: 2px solid var(--text-main); background: rgba(69, 162, 158, 0.05); }
+  .sector-node::before {
+    content: ""; position: absolute; left: 0; top: 0; width: 4px; height: 100%; background: var(--border-sub); transition: 0.3s;
+  }
+  .sector-node:hover, .sector-node.selected {
+    border-color: var(--text-main);
+    background: rgba(69, 162, 158, 0.12);
+    transform: translateX(8px);
+    box-shadow: 0 0 20px rgba(102, 252, 241, 0.15);
+  }
+  .sector-node:hover::before, .sector-node.selected::before {
+    background: var(--text-main);
+    box-shadow: 0 0 10px var(--text-main);
+  }
 
-  .section-title { color: #fff; font-size: 22px; margin-bottom: 15px; }
-  .desc-box { background: rgba(0,0,0,0.5); border: 1px dashed var(--border-sub); padding: 20px; border-radius: 4px; margin-bottom: 20px; line-height: 1.7; }
-  .highlight { color: var(--alert-red); font-weight: bold; }
-  .doc-list { padding-left: 20px; line-height: 1.8; font-size: 14px; }
-  .doc-list li { margin-bottom: 8px; }
+  .sector-tag { font-size: 11px; color: var(--text-mute); letter-spacing: 2px; margin-bottom: 4px; font-weight: bold; }
+  .sector-node:hover .sector-tag, .sector-node.selected .sector-tag { color: var(--text-main); }
+  .sector-title { font-size: 16px; font-weight: bold; color: #fff; }
 
-  @media screen and (max-width: 900px) {
-    .terminal-box { width: 100vw; height: 100vh; border-radius: 0; border: none; }
+  /* 우측 실시간 브리핑 패널 */
+  .sector-briefing {
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid var(--border-sub);
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 380px;
+    border-radius: 2px;
+    position: relative;
+  }
+  .briefing-header { border-bottom: 1px dashed var(--border-sub); padding-bottom: 15px; margin-bottom: 15px; }
+  .briefing-zone { font-size: 12px; color: var(--accent-gold); font-weight: bold; letter-spacing: 2px; }
+  .briefing-name { font-size: 24px; color: #fff; font-weight: bold; margin-top: 4px; }
+  .briefing-body { font-size: 14px; line-height: 1.8; color: var(--text-light); }
+  .briefing-footer { margin-top: 20px; border-top: 1px dashed var(--border-sub); padding-top: 15px; display: flex; justify-content: space-between; font-size: 12px; color: var(--text-mute); }
+
+  /* 시스템 소개 아코디언 */
+  .system-accordion { display: flex; flex-direction: column; gap: 15px; }
+  .acc-item { background: var(--bg-card); border: 1px solid var(--border-sub); border-radius: 2px; overflow: hidden; }
+  .acc-header {
+    padding: 16px 20px; background: rgba(0,0,0,0.4); display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.3s; font-weight: bold; color: #fff;
+  }
+  .acc-header:hover { background: rgba(69, 162, 158, 0.1); color: var(--text-main); }
+  .acc-content { padding: 20px; display: none; font-size: 14px; line-height: 1.8; border-top: 1px solid var(--border-sub); background: rgba(0,0,0,0.2); }
+  .acc-content.open { display: block; }
+
+  @media screen and (max-width: 950px) {
+    .map-hud-container { grid-template-columns: 1fr; }
+    .terminal-box { width: 100vw; height: 100vh; border: none; }
     .char-grid { grid-template-columns: 1fr; }
     .char-card { flex-direction: column; }
     .char-img-box { width: 100%; height: 260px; }
-    .view-pane { padding: 15px; }
   }
 </style>
 </head>
 <body>
 
-<!-- 📡 배경 레이더 파동 링 -->
 <div class="radar-pulse"></div>
 <div class="radar-pulse"></div>
 <div class="radar-pulse"></div>
 
-<!-- 🔒 인트라넷 로그인 콘솔 -->
+<!-- 🔒 로그인 화면 -->
 <div id="login-screen">
   <div class="login-box">
     <div style="font-size: 32px; margin-bottom: 10px;">⚠️</div>
@@ -412,17 +299,15 @@
   </div>
 </div>
 
-<!-- 백그라운드 BGM 플레이어 -->
 <div id="player" style="display:none;"></div>
 
 <div class="terminal-box">
-  <!-- 🟢 레이저 스캐너 바 -->
   <div class="scanner-line"></div>
 
   <div class="header">
     <button class="logo-btn" onclick="switchView('overview')">
       <span>⚙️ [ A.C.A. ]</span>
-      <span style="font-size: 11px; color: var(--text-mute); font-weight: normal;">(협회 개요 보기)</span>
+      <span style="font-size: 11px; color: var(--text-mute); font-weight: normal;">(협회 개요 및 지도)</span>
     </button>
     
     <div class="header-right">
@@ -445,16 +330,85 @@
       <div id="rank-content" class="char-grid"></div>
     </div>
 
-    <!-- 📖 OVERVIEW 뷰 -->
+    <!-- 🗺️ OVERVIEW & INTERACTIVE MAP 뷰 -->
     <div class="view-pane" id="overview-view">
       <div class="overview-container">
+        
         <div class="sub-tabs">
-          <button class="sub-btn active" onclick="loadLore('genesis', this)">협회 시스템 & 기원</button>
-          <button class="sub-btn" onclick="loadLore('structure', this)">시설 및 구속 등급</button>
-          <button class="sub-btn" onclick="loadLore('deepsea', this)">심해 구역</button>
-          <button class="sub-btn" onclick="loadLore('handler', this)">전속 관리관 수칙</button>
+          <button class="sub-btn active" onclick="switchOverviewTab('map', this)">[1] 구역 전술 지도 (HUD MAP)</button>
+          <button class="sub-btn" onclick="switchOverviewTab('lore', this)">[2] 협회 시스템 & 프로토콜</button>
         </div>
-        <div id="lore-content"></div>
+
+        <!-- 🗺️ 인터랙티브 구역 지도 섹션 -->
+        <div id="map-section">
+          <div class="map-hud-container">
+            <div class="map-blueprint">
+              <div class="sector-node selected" onmouseenter="updateSector(0)" onclick="updateSector(0)">
+                <div class="sector-tag">SECTOR 01 // SURFACE</div>
+                <div class="sector-title">지상 관공서 및 다중 방벽 군 (빌딩 군)</div>
+              </div>
+              <div class="sector-node" onmouseenter="updateSector(1)" onclick="updateSector(1)">
+                <div class="sector-tag">SECTOR 02 // SUB-LEVEL 1~3</div>
+                <div class="sector-title">지하 연구소 및 중앙 통제국 (Bunker)</div>
+              </div>
+              <div class="sector-node" onmouseenter="updateSector(2)" onclick="updateSector(2)">
+                <div class="sector-tag">SECTOR 03 // UPPER CONTAINMENT</div>
+                <div class="sector-title">지상 격리구역 (제7, 13, 28 격리실)</div>
+              </div>
+              <div class="sector-node" onmouseenter="updateSector(3)" onclick="updateSector(3)">
+                <div class="sector-tag">SECTOR 04 // DEEP-SEA ABYSS</div>
+                <div class="sector-title">심해 수중 격리구역 (Deep-Sea Sector)</div>
+              </div>
+            </div>
+
+            <div class="sector-briefing" id="sectorBriefing">
+              <!-- JS 동적 렌더링 -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 📖 아코디언 시스템 상세 소개 섹션 -->
+        <div id="lore-section" style="display:none;">
+          <div class="system-accordion">
+            <div class="acc-item">
+              <div class="acc-header" onclick="toggleAccordion(this)">
+                <span>01. 원형 바이러스 기원 및 협회 설립 목적</span>
+                <span>▼</span>
+              </div>
+              <div class="acc-content open">
+                수십 년 전 원인 불명의 '원형 바이러스(Proto-Pathogen)' 발발로 지능형 이형체(인외)들이 대거 탄생했습니다[cite: 1]. A.C.A.는 이를 단순한 생명체가 아닌 국가 안보를 위협하는 '잠재적 재앙 물질'이자 '표본'으로 규정하고 합법적 통제와 자원 착취를 집행합니다[cite: 1].
+              </div>
+            </div>
+
+            <div class="acc-item">
+              <div class="acc-header" onclick="toggleAccordion(this)">
+                <span>02. 6단계 구속 등급 체계 (Protocol Rank)</span>
+                <span>▼</span>
+              </div>
+              <div class="acc-content">
+                • <b>Level D:</b> 발목 억제 앵클릿, 위치 추적기<br>
+                • <b>Level C:</b> 경량 신경 억제 목걸이 부착<br>
+                • <b>Level B:</b> 상체 금속 억제 사슬 및 전격 방출 목걸이 (지세르 기본)<br>
+                • <b>Level A:</b> 척추 초고압 억제 프레임, 분비물 억제 마스크 (카르에 기본)<br>
+                • <b>Level S:</b> 신경 전도 차단 수트, 24시간 진정제 강제 링거 (데젤, 아이리스 기본)<br>
+                • <b>Level 특급:</b> 감각 완전 차단 캡슐 밀봉, 의식 강제 동면 유지
+              </div>
+            </div>
+
+            <div class="acc-item">
+              <div class="acc-header" onclick="toggleAccordion(this)">
+                <span>03. 전속 관리관(Handler) 전용 장비 및 처분 권한</span>
+                <span>▼</span>
+              </div>
+              <div class="acc-content">
+                • <b>초고압 내압 슈트:</b> 심해 구역 잠수 및 음파 변환 통신 장비.<br>
+                • <b>비상 바이오 패치:</b> 신경독 노출 시 10초 내 자가 해독 주사기.<br>
+                • <b style="color:var(--alert-red);">Kill Switch (처분 권한 코드):</b> 태블릿을 통해 억제구에 초고전압을 방출시켜 심정지를 유도하는 즉각 처분 스위치.
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -504,60 +458,69 @@ function toggleBGM() {
   }
 }
 
-/* 📖 LORE 데이터 ('제5' 제외 반영) */
-const loreData = {
-  genesis: `
-    <h2 class="section-title">1. 기원 및 배경 (The Genesis)</h2>
-    <ul class="doc-list">
-      <li>수십 년 전, 원인 불명의 전 지구적 변이성 전염병 <b>'원형 바이러스(Proto-Pathogen)'</b> 발발.</li>
-      <li>생물의 진화를 기형적으로 촉진하고 무생물에 생체 반응을 부여해 지능형 이형체 대거 탄생.</li>
-      <li>이를 체계적으로 포획, 격리, 감시하기 위해 설립된 국가 직속 최고 권한 통제 기관이 바로 <b>A.C.A.</b>임.</li>
-    </ul>
-    <div class="desc-box">
-      <b>[협회 운영 방침]</b><br>
-      인외를 '지능을 가진 생명'으로 취급하지 않음. 국가 안전을 위협하는 <span class="highlight">'잠재적 재앙 물질'이자 '관리 대상 표본'</span>으로만 규정.<br>
-      가혹하고 기계적인 통제 아래 24시간 감시, 신경 억제, 물리적 구속이 합법적으로 집행됨.
+/* 🗺️ 구역 지도 데이터베이스 */
+const sectorData = [
+  {
+    tag: "SECTOR 01 // SURFACE",
+    name: "지상 관공서 및 다중 방벽 군",
+    desc: "철저한 위장막과 다중 보안 방벽으로 둘러싸인 거대 연구 관공서 빌딩 군입니다[cite: 1]. 대외적으로는 국가 산하 생명공학 연구소로 위장되어 있으며 지상 출입 및 비인가자 차단을 전담합니다[cite: 1].",
+    spec: "• 방어 등급: Level 5 전자기 방벽<br>• 상주 인원: 제1통제국 무장 경비대<br>• 특이사항: 대외용 위장 인트라넷 가동"
+  },
+  {
+    tag: "SECTOR 02 // SUB-LEVEL 1~3",
+    name: "지하 연구소 및 중앙 통제국",
+    desc: "수천 미터 수직 방공호 중심부에 위치한 A.C.A.의 심장부입니다[cite: 1]. 제1통제국(진압), 제2연구국(추출/개조), 제3관리국(심리 통제)이 위치해 실시간 구역 감시를 집행합니다.",
+    spec: "• 시설: 생체 무기 개조실, 원형 바이러스 정제소<br>• 관리 시스템: 신경 억제 가스 중앙 살포관[cite: 1]<br>• 완충 홀: 일일 30분 정기 완충 구역[cite: 1]"
+  },
+  {
+    tag: "SECTOR 03 // UPPER CONTAINMENT",
+    name: "지상 격리구역 (육상 이형체)",
+    desc: "양서형 및 지상 호흡이 가능한 고위험 인외들이 수감된 고강도 격리실 군입니다[cite: 1]. A급 이상의 신체 개조형, 신성 오염형 개체들이 24시간 감시를 받습니다.",
+    spec: "• 주요 수감실: 제7격리실(카르에), 제13격리실(데젤), 제28격리실(아이리스)<br>• 환경: 공기 중 수분 억제 건조 시스템 가동<br>• 경보: 촉수 분출 및 신경 교란 주의"
+  },
+  {
+    tag: "SECTOR 04 // DEEP-SEA ABYSS",
+    name: "심해 수중 격리구역 (Deep-Sea)",
+    desc: "지하 최심부에 초고압과 칠흑 같은 암흑을 재현한 초대형 해양 생태 돔입니다[cite: 1]. 완전 수생 인외들이 영구 격리되며, 매일 40분간 격벽이 열리는 'Deep-Purge' 프로토콜이 집행됩니다[cite: 1].",
+    spec: "• 주요 수감: 아야나 (D-007), 지세르 (B-012)[cite: 1]<br>• 방어 기제: 고농도 신경 마비 전류 & 음파 충격파[cite: 1]<br>• 관리인 진입: 초고압 내압 잠수 슈트 착용 필수[cite: 1]"
+  }
+];
+
+function updateSector(index) {
+  document.querySelectorAll('.sector-node').forEach((node, idx) => {
+    node.classList.toggle('selected', idx === index);
+  });
+  const data = sectorData[index];
+  const container = document.getElementById('sectorBriefing');
+  container.innerHTML = `
+    <div class="briefing-header">
+      <div class="briefing-zone">${data.tag}</div>
+      <div class="briefing-name">${data.name}</div>
     </div>
-  `,
-  structure: `
-    <h2 class="section-title">2. 시설 구조 및 6단계 구속 등급</h2>
-    <ul class="doc-list">
-      <li><b>지상:</b> 철저한 위장막과 다중 보안 방벽으로 둘러싸인 거대 연구 관공서 빌딩 군.</li>
-      <li><b>지하:</b> 수천 미터 깊이까지 수직으로 뚫려 있는 초대형 방공호 및 벙커 형태의 지하 요새.</li>
-      <li><b>정기 완충 시간:</b> 장기 수감 붕괴 방지를 위해 하루 30분간 공용 홀에서 집행 (충돌 시 신경 억제 가스 살포).</li>
-    </ul>
-    <div class="desc-box">
-      <b>[A.C.A. 프로토콜: 6단계 구속 수준 체계]</b><br>
-      • <b>Level D:</b> 발목 억제 앵클릿, 위치 추적기<br>
-      • <b>Level C:</b> 경량 신경 억제 목걸이 부착<br>
-      • <b>Level B:</b> 상체 금속 억제 사슬 및 전격 방출형 목걸이<br>
-      • <b>Level A:</b> 척추/관절 초고압 억제 프레임, 분비물 억제 마스크<br>
-      • <b>Level S:</b> 신경 전도 차단 수트, 사지 영구 결박, 24시간 진정제 강제 링거<br>
-      • <b>Level 특급:</b> 감각 완전 차단 캡슐 밀봉, 의식 강제 동면 상태 유지
+    <div class="briefing-body">
+      <p style="margin-bottom:15px;">${data.desc}</p>
+      <div style="background:rgba(69,162,158,0.06); padding:12px; border-left:2px solid var(--text-main); font-size:13px; line-height:1.7;">
+        ${data.spec}
+      </div>
     </div>
-  `,
-  deepsea: `
-    <h2 class="section-title">3. 심해 수중 격리구역 (Deep-Sea Sector)</h2>
-    <div class="desc-box">
-      지하 최심부, 초고압과 칠흑 같은 암흑을 재현한 '초대형 심해 인공 해역'. 완전 수생 인외(아야나, 지세르 등) 영구 격리.
+    <div class="briefing-footer">
+      <span>TACTICAL MONITOR : ONLINE</span>
+      <span style="color:var(--text-main);">CLEARANCE: LEVEL 3+</span>
     </div>
-    <ul class="doc-list">
-      <li><b>[수중 개방 프로토콜 (Deep-Purge)]:</b> 하루 1회, 40분간 나노 격벽이 수납되어 거대 해역으로 합류.</li>
-      <li><b>관리인 수중 진입:</b> 초고압 내압 잠수 슈트를 착용하고 다이빙하여 담당 개체와 1:1 물리 접촉 검진.</li>
-      <li><b>비상 안전장치:</b> 유혈 사태 발생 시 전 수역에 즉각 <span class="highlight">'고농도 신경 마비 전도 전류' 및 '수중 청각 충격파'</span> 방출하여 강제 기절.</li>
-    </ul>
-  `,
-  handler: `
-    <h2 class="section-title">4. 전속 관리관 (Specialized Handler)</h2>
-    <div class="desc-box">
-      연구원(해부/실험)이나 경비 요원(무력 진압)과 분리된 직군. 인외의 '정신적 붕괴와 폭주'를 막기 위해 신체 접촉, 수분 공급 등을 전담하는 유일한 창구. A급 이상 담당은 목숨을 담보로 한 고위험 현장직.
-    </div>
-    <ul class="doc-list">
-      <li><b>비상 바이오 패치:</b> 독성 물질 노출 시 10초 내 해독하는 즉각 주사기.</li>
-      <li><b><span class="highlight">Kill Switch (처분 권한 코드):</span></b> ID 카드/태블릿에 내장. 담당 인외의 억제구에 초고전압을 방출시켜 심정지나 기절 유도 (인외 불신의 핵심 원인).</li>
-    </ul>
-  `
-};
+  `;
+}
+
+function switchOverviewTab(tab, btn) {
+  document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('map-section').style.display = tab === 'map' ? 'block' : 'none';
+  document.getElementById('lore-section').style.display = tab === 'lore' ? 'block' : 'none';
+}
+
+function toggleAccordion(header) {
+  const content = header.nextElementSibling;
+  content.classList.toggle('open');
+}
 
 /* 🗂️ 캐릭터 DB */
 const characters = {
@@ -608,11 +571,9 @@ const characters = {
       extraction: "생체 기계 촉수의 재생 조직 및 개조 바이러스 혈청."
     }
   ],
-  "S": [],
-  "SP": []
+  "S": [], "SP": []
 };
 
-/* 🎨 배지 색상 스타일 (특급 네온 보라 추가) */
 const badgeStyles = {
   "Level D": "color: #a8dadc; border-color: #a8dadc;",
   "Level C": "color: #2a9d8f; border-color: #2a9d8f;",
@@ -642,18 +603,12 @@ function switchView(viewName) {
     toggleBtn.innerHTML = "ARCHIVE : OVERVIEW ⚙️";
     toggleBtn.style.color = "var(--text-main)";
     toggleBtn.style.borderColor = "var(--text-main)";
-    loadLore('genesis', document.querySelector('.sub-btn'));
+    updateSector(0);
   }
 }
 
 function toggleCurrentView() {
   switchView(currentView === 'shop' ? 'overview' : 'shop');
-}
-
-function loadLore(key, btnElem) {
-  document.querySelectorAll('.sub-btn').forEach(btn => btn.classList.remove('active'));
-  if (btnElem) btnElem.classList.add('active');
-  document.getElementById('lore-content').innerHTML = loreData[key];
 }
 
 function loadRank(rank, btnElem) {
@@ -715,6 +670,7 @@ function loadRank(rank, btnElem) {
 
 window.addEventListener('DOMContentLoaded', () => {
   loadRank('B', document.querySelector('.rank-btn.active'));
+  updateSector(0);
 });
 </script>
 </body>
