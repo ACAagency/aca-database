@@ -113,7 +113,6 @@
     position: relative;
     backdrop-filter: blur(15px);
   }
-  /* 테크니컬 코너 데코 (+) */
   .login-box::before { content: "+"; position: absolute; top: -10px; left: -8px; color: var(--text-main); font-size: 18px; }
   .login-box::after { content: "+"; position: absolute; bottom: -12px; right: -8px; color: var(--text-main); font-size: 18px; }
 
@@ -207,7 +206,6 @@
   }
   .map-hud-container::before { content: "+ [TACTICAL SECTOR MAP]"; position: absolute; top: -10px; left: 15px; background: var(--bg-dark); padding: 0 10px; font-size: 11px; color: var(--text-main); font-weight: bold; }
 
-  /* 수직 단면 지도 뷰어 */
   .map-blueprint {
     display: flex;
     flex-direction: column;
@@ -353,7 +351,7 @@
               </div>
               <div class="sector-node" onmouseenter="updateSector(2)" onclick="updateSector(2)">
                 <div class="sector-tag">SECTOR 03 // UPPER CONTAINMENT</div>
-                <div class="sector-title">지상 격리구역 (제7, 13, 28 격리실)</div>
+                <div class="sector-title">지상 격리구역 (제7, 13, 19, 28 격리실)</div>
               </div>
               <div class="sector-node" onmouseenter="updateSector(3)" onclick="updateSector(3)">
                 <div class="sector-tag">SECTOR 04 // DEEP-SEA ABYSS</div>
@@ -376,7 +374,7 @@
                 <span>▼</span>
               </div>
               <div class="acc-content open">
-                수십 년 전 원인 불명의 '원형 바이러스(Proto-Pathogen)' 발발로 지능형 이형체(인외)들이 대거 탄생했습니다[cite: 1]. A.C.A.는 이를 단순한 생명체가 아닌 국가 안보를 위협하는 '잠재적 재앙 물질'이자 '표본'으로 규정하고 합법적 통제와 자원 착취를 집행합니다[cite: 1].
+                수십 년 전 원인 불명의 '원형 바이러스(Proto-Pathogen)' 발발로 지능형 이형체들이 대거 탄생했습니다[cite: 1]. A.C.A.는 이를 단순한 생명체가 아닌 국가 안보를 위협하는 '잠재적 재앙 물질'이자 '관리 대상 표본'으로 규정하고 합법적 통제와 자원 착취를 집행합니다[cite: 1].
               </div>
             </div>
 
@@ -386,12 +384,12 @@
                 <span>▼</span>
               </div>
               <div class="acc-content">
-                • <b>Level D:</b> 발목 억제 앵클릿, 위치 추적기<br>
-                • <b>Level C:</b> 경량 신경 억제 목걸이 부착<br>
-                • <b>Level B:</b> 상체 금속 억제 사슬 및 전격 방출 목걸이 (지세르 기본)<br>
-                • <b>Level A:</b> 척추 초고압 억제 프레임, 분비물 억제 마스크 (카르에 기본)<br>
-                • <b>Level S:</b> 신경 전도 차단 수트, 24시간 진정제 강제 링거 (데젤, 아이리스 기본)<br>
-                • <b>Level 특급:</b> 감각 완전 차단 캡슐 밀봉, 의식 강제 동면 유지
+                • <b>Level D:</b> 발목 억제 앵클릿, 위치 추적기[cite: 1]<br>
+                • <b>Level C:</b> 경량 신경 억제 목걸이 부착 (가에 기본)[cite: 1]<br>
+                • <b>Level B:</b> 상체 금속 억제 사슬 및 전격 방출 목걸이 (지세르, 온라 기본)[cite: 1]<br>
+                • <b>Level A:</b> 척추 초고압 억제 프레임, 분비물 억제 마스크 (카르에 기본)[cite: 1]<br>
+                • <b>Level S:</b> 신경 전도 차단 수트, 24시간 진정제 강제 링거 (데젤, 아이리스 기본)[cite: 1]<br>
+                • <b>Level 특급:</b> 감각 완전 차단 캡슐 밀봉, 의식 강제 동면 유지[cite: 1]
               </div>
             </div>
 
@@ -401,9 +399,9 @@
                 <span>▼</span>
               </div>
               <div class="acc-content">
-                • <b>초고압 내압 슈트:</b> 심해 구역 잠수 및 음파 변환 통신 장비.<br>
-                • <b>비상 바이오 패치:</b> 신경독 노출 시 10초 내 자가 해독 주사기.<br>
-                • <b style="color:var(--alert-red);">Kill Switch (처분 권한 코드):</b> 태블릿을 통해 억제구에 초고전압을 방출시켜 심정지를 유도하는 즉각 처분 스위치.
+                • <b>초고압 내압 슈트:</b> 심해 구역 잠수 및 음파 변환 통신 장비[cite: 1].<br>
+                • <b>비상 바이오 패치:</b> 신경독 노출 시 10초 내 자가 해독 주사기[cite: 1].<br>
+                • <b style="color:var(--alert-red);">Kill Switch (처분 권한 코드):</b> 태블릿을 통해 억제구에 초고전압을 방출시켜 심정지를 유도하는 즉각 처분 스위치[cite: 1].
               </div>
             </div>
           </div>
@@ -458,25 +456,25 @@ function toggleBGM() {
   }
 }
 
-/* 🗺️ 구역 지도 데이터베이스 */
+/* 🗺️ 구역 지도 데이터베이스 ('이형체' 전면 반영) */
 const sectorData = [
   {
     tag: "SECTOR 01 // SURFACE",
     name: "지상 관공서 및 다중 방벽 군",
     desc: "철저한 위장막과 다중 보안 방벽으로 둘러싸인 거대 연구 관공서 빌딩 군입니다[cite: 1]. 대외적으로는 국가 산하 생명공학 연구소로 위장되어 있으며 지상 출입 및 비인가자 차단을 전담합니다[cite: 1].",
-    spec: "• 방어 등급: Level 5 전자기 방벽<br>• 상주 인원: 제1통제국 무장 경비대<br>• 특이사항: 대외용 위장 인트라넷 가동"
+    spec: "• 방어 등급: Level 5 전자기 방벽<br>• 상주 인원: 제1통제국 무장 경비대[cite: 1]<br>• 특이사항: 대외용 위장 인트라넷 가동"
   },
   {
     tag: "SECTOR 02 // SUB-LEVEL 1~3",
     name: "지하 연구소 및 중앙 통제국",
-    desc: "수천 미터 수직 방공호 중심부에 위치한 A.C.A.의 심장부입니다[cite: 1]. 제1통제국(진압), 제2연구국(추출/개조), 제3관리국(심리 통제)이 위치해 실시간 구역 감시를 집행합니다.",
-    spec: "• 시설: 생체 무기 개조실, 원형 바이러스 정제소<br>• 관리 시스템: 신경 억제 가스 중앙 살포관[cite: 1]<br>• 완충 홀: 일일 30분 정기 완충 구역[cite: 1]"
+    desc: "수천 미터 수직 방공호 중심부에 위치한 A.C.A.의 심장부입니다[cite: 1]. 제1통제국(진압), 제2연구국(추출/개조), 제3관리국(심리 통제)이 위치해 실시간 구역 감시를 집행합니다[cite: 1].",
+    spec: "• 시설: 생체 무기 개조실, 원형 바이러스 정제소[cite: 1]<br>• 관리 시스템: 신경 억제 가스 중앙 살포관[cite: 1]<br>• 완충 홀: 일일 30분 정기 완충 구역[cite: 1]"
   },
   {
     tag: "SECTOR 03 // UPPER CONTAINMENT",
     name: "지상 격리구역 (육상 이형체)",
-    desc: "양서형 및 지상 호흡이 가능한 이형체들이 수감된 고강도 격리실 군입니다[cite: 1]. 이형체들이 24시간 감시를 받습니다.",
-    spec: "• 주요 수감실: 제7격리실(카르에), 제13격리실(데젤), 제28격리실(아이리스)<br>• 환경: 공기 중 수분 억제 건조 시스템 가동<br>• 경보: 촉수 분출 및 신경 교란 주의"
+    desc: "양서형 및 지상 호흡이 가능한 이형체들이 수감된 고강도 격리실 군입니다[cite: 1]. 수감된 이형체들은 기계적인 통제 시스템 아래 24시간 감시를 받습니다[cite: 1].",
+    spec: "• 주요 수감실: 제7격리실(카르에), 제13격리실(데젤), 제19격리실(온라·가에), 제28격리실(아이리스)[cite: 1]<br>• 환경: 공기 중 수분 억제 건조 시스템 가동<br>• 경보: 생체 촉수 분출 및 신경 교란 주의"
   },
   {
     tag: "SECTOR 04 // DEEP-SEA ABYSS",
@@ -522,7 +520,7 @@ function toggleAccordion(header) {
   content.classList.toggle('open');
 }
 
-/* 🗂️ 캐릭터 DB */
+/* 🗂️ 캐릭터 DB (이형체 표기 및 온라/가에 추가 완료) */
 const characters = {
   "D": [
     {
@@ -534,7 +532,16 @@ const characters = {
       extraction: "극도의 고통에서 뱉어내는 <b>'진주(초고밀도 바이러스 결정체)'</b> 및 고순도 생체 혈액."
     }
   ],
-  "C": [],
+  "C": [
+    {
+      code: "C-063", name: "가에 (Gae)", rank: "Level C", location: "지상구역-제19격리실(B구역)",
+      species: "C급 흑조형 이형체", img: "./gae.png",
+      appearance: "흑발에 서늘한 푸른 눈동자(벽안). 등 뒤에 크기 조절이 가능한 칠흑 같은 흑조 날개. 경량 신경 억제 목걸이 착용.",
+      desc: "까칠하고 경계심 강한 반말 구사. 언니 온라를 지키는 것이 삶의 최우선 목적. 유저에게 경계와 서툰 호감을 동시에 품음.",
+      gimmick: "날개의 크기를 손바닥 크기부터 신체를 전부 덮는 크기까지 압축/팽창 조절 가능. 위협 시 날개를 부풀려 방패로 활용.",
+      extraction: "흑조 깃털 표면 코팅막에서 추출되는 <b>'광학 차폐(빛 굴절) 유성 성분'</b>."
+    }
+  ],
   "B": [
     {
       code: "B-012", name: "지세르 (Giselle)", rank: "Level B", location: "심해 돔 수중격리",
@@ -551,6 +558,14 @@ const characters = {
       desc: "오만하고 냉소적. 인간과 통제관 혐오. 낮고 서늘한 저음의 반말 사용.",
       gimmick: "아이리스가 메스를 들이대면 거친 날갯짓으로 가로막음. 구속구에 묶여있어도 절대 굴복 안 함.",
       extraction: "신성 오염 깃털 및 이형체 파장 억제 물질 (추정)."
+    },
+    {
+      code: "B-062", name: "온라 (Onla)", rank: "Level B", location: "지상구역-제19격리실(A구역)",
+      species: "B급 백조형 이형체", img: "./onla.png",
+      appearance: "창백한 백발에 붉은 눈동자(적안). 등 뒤에 순백의 거대한 날개. 날개 관절부와 상체에 금속 억제 사슬 착용.",
+      desc: "극도로 조용하고 예의 바른 존댓말 구사. 자존감이 낮고 쉽게 위축됨. 유저의 작은 친절에 조심스럽게 의지함.",
+      gimmick: "공포나 감정 격앙 시 날개 깃털이 금속처럼 경화되어 주변을 베는 돌발 발작을 일으킴. 유리벽 너머 가에를 늘 걱정함.",
+      extraction: "날개에서 강제 탈락시키는 <b>'고경도 나노 강화 깃털'</b> 및 깃대에서 정제되는 <b>'정신 진정 림프액'</b>."
     }
   ],
   "A": [
@@ -571,7 +586,8 @@ const characters = {
       extraction: "생체 기계 촉수의 재생 조직 및 개조 바이러스 혈청."
     }
   ],
-  "S": [], "SP": []
+  "S": [],
+  "SP": []
 };
 
 const badgeStyles = {
